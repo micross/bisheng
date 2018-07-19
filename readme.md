@@ -1,0 +1,1 @@
+默认管理账号和密码分别是admin    haoid.cn
