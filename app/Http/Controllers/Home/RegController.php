@@ -16,7 +16,7 @@ class RegController extends Controller
      */
     public function terms(Request $request)
     {
-        $this->display();
+        return view('home.reg.terms');
     }
     /**
      * 添加注册用户
