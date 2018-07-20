@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use Think\Model;
+use Illuminate\Database\Eloquent\Model;
 
-class IssueModel extends Model
+class Issue extends Model
 {
 
     protected $_validate = array(

@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use Think\Model;
+use Illuminate\Database\Eloquent\Model;
 
-class OrdersModel extends Model
+class Orders extends Model
 {
     protected $_auto = array (
         array('status','0'),

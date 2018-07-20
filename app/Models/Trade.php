@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use Think\Model;
+use Illuminate\Database\Eloquent\Model;
 
-class TradeModel extends Model
+class Trade extends Model
 {
     protected $_auto = array (
         array('status','0'),

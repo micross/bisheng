@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use Think\Model;
+use Illuminate\Database\Eloquent\Model;
 
-class ArticleModel extends Model
+class Article extends Model
 {
     //查询非标红文章（6个）
     public function info($id)
