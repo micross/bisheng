@@ -93,7 +93,7 @@ class PendingController extends Controller
         }
         //查询用户可用金额等信息
         $info = $this->getMoneyByid($id);
-        if ($info['status']!=3) {
+        if ($info['status'] != 3) {
             $datas['status'] = -1;
             $datas['info'] = "请不要重复操作";
             $this->ajaxReturn($datas);
@@ -101,10 +101,10 @@ class PendingController extends Controller
         //通过状态为2
         $data ['status'] = 2;
         $data ['check_time'] = time();
-        $data ['admin_uid'] =$_SESSION['admin_userid'];
+        $data ['admin_uid'] = $_SESSION['admin_userid'];
         //更新数据库
         $re = M('Withdraw')->where("withdraw_id = '{$id}'")->save($data);
-        $num= M('Withdraw')->where("withdraw_id = '{$id}'")->find();
+        $num = M('Withdraw')->where("withdraw_id = '{$id}'")->find();
         M('Member')->where("member_id={$num['uid']}")->setDec('forzen_rmb', $num['all_money']);
         if ($re == false) {
             $datas['status'] = 0;
@@ -112,7 +112,7 @@ class PendingController extends Controller
             $this->ajaxReturn($datas);
         }
         $this->addMessage_all($info['member_id'], -2, 'CNY提现成功', "恭喜您提现{$info['all_money']}成功！");
-        $this->addFinance($info['member_id'], 23, "提现{$info['all_money']}", $info['all_money']-$info['withdraw_fee'], 2, 0);
+        $this->addFinance($info['member_id'], 23, "提现{$info['all_money']}", $info['all_money'] - $info['withdraw_fee'], 2, 0);
         $datas['status'] = 1;
         $datas['info'] = "提现通过，操作成功";
         $this->ajaxReturn($datas);
@@ -132,7 +132,7 @@ class PendingController extends Controller
         }
         //查询用户可用金额等信息
         $info = $this->getMoneyByid($id);
-        if ($info['status']!=3) {
+        if ($info['status'] != 3) {
             $datas['status'] = -1;
             $datas['info'] = "请不要重复操作";
             $this->ajaxReturn($datas);
@@ -145,7 +145,7 @@ class PendingController extends Controller
         //不通过状态为1
         $data ['status'] = 1;
         $data ['check_time'] = time();
-        $data ['admin_uid'] =$_SESSION['admin_userid'];
+        $data ['admin_uid'] = $_SESSION['admin_userid'];
         //更新数据库,member修改金额
         $res = M('Member')->where("member_id = {$info['member_id']}")->save($money);
         //withdraw修改状态
@@ -174,10 +174,10 @@ class PendingController extends Controller
     public function getMoneyByid(Request $request, $id)
     {
 
-        $field = C("DB_PREFIX")."member.member_id,".C("DB_PREFIX")."member.rmb,".C("DB_PREFIX")."member.forzen_rmb,".C("DB_PREFIX")."withdraw.status,".C("DB_PREFIX")."withdraw.all_money,".C("DB_PREFIX")."withdraw.withdraw_fee";
+        $field = C("DB_PREFIX") . "member.member_id," . C("DB_PREFIX") . "member.rmb," . C("DB_PREFIX") . "member.forzen_rmb," . C("DB_PREFIX") . "withdraw.status," . C("DB_PREFIX") . "withdraw.all_money," . C("DB_PREFIX") . "withdraw.withdraw_fee";
         $rmb = M('Withdraw')
                 ->field($field)
-                ->join(C("DB_PREFIX")."member ON ".C("DB_PREFIX")."withdraw.uid = ".C("DB_PREFIX")."member.member_id")
+                ->join(C("DB_PREFIX") . "member ON " . C("DB_PREFIX") . "withdraw.uid = " . C("DB_PREFIX") . "member.member_id")
                 ->where("withdraw_id = '{$id}'")
                 ->find();
         if (empty($rmb)) {
@@ -191,11 +191,11 @@ class PendingController extends Controller
     public function derivedExcel(Request $request)
     {
         //时间筛选
-        $add_time=I('get.add_time');
-        $end_time=I('get.end_time');
-        $add_time=empty($add_time)?0:strtotime($add_time);
-        $end_time=empty($end_time)?0:strtotime($end_time);
-        $where[C("DB_PREFIX").'withdraw.add_time'] = array('lt',$end_time);
+        $add_time = I('get.add_time');
+        $end_time = I('get.end_time');
+        $add_time = empty($add_time) ? 0 : strtotime($add_time);
+        $end_time = empty($end_time) ? 0 : strtotime($end_time);
+        $where[C("DB_PREFIX") . 'withdraw.add_time'] = array('lt',$end_time);
         $withdraw = M('withdraw');
         $list = $withdraw
         ->table('__WITHDRAW__ w')
@@ -218,12 +218,12 @@ class PendingController extends Controller
         ->join('__AREAS__ ab ON ab.area_id=b.address', 'LEFT')
         ->join('__AREAS__ a ON a.area_id=ab.parent_id', 'LEFT')
         ->join('__MEMBER__ m ON m.member_id=w.uid', 'LEFT')
-        ->where('w.add_time >'.$add_time)
+        ->where('w.add_time >' . $add_time)
         ->select();
         foreach ($list as $k => $v) {
-            $list[$k]['status']=drawStatus($v['status']);
-            $list[$k]['add_time']=date('Y-m-d H:i:s', $v['add_time']);
-            $list[$k]['cardnum']='`'.$list[$k]['cardnum'].'`';
+            $list[$k]['status'] = drawStatus($v['status']);
+            $list[$k]['add_time'] = date('Y-m-d H:i:s', $v['add_time']);
+            $list[$k]['cardnum'] = '`' . $list[$k]['cardnum'] . '`';
         }
         $title = array(
                 'Id',
@@ -241,7 +241,7 @@ class PendingController extends Controller
                 '提交时间',
                 '状态',
         );
-        $filename= $this->config['name']."提现日志-".date('Y-m-d', time());
+        $filename = $this->config['name'] . "提现日志-" . date('Y-m-d', time());
         $r = exportexcel($list, $title, $filename);
     }
 }

@@ -38,7 +38,7 @@ class BonusController extends Controller
         
         $list = $finance
         ->where($where)
-        ->limit($Page->firstRow.','.$Page->listRows)->select();
+        ->limit($Page->firstRow . ',' . $Page->listRows)->select();
         $this->assign('list', $list);// 赋值数据集
         $this->assign('page', $show);// 赋值分页输出
         $this->display(); // 输出模板
@@ -74,14 +74,14 @@ class BonusController extends Controller
             $where['currency_id']  = $_POST['currency_id'] ;
             $where['num'] = array('gt',0);
             //设置分红只有在账号正常情况下才可以分红  status  =1 位正常情况
-            $member=M("Member")->where("status = 1")->select();
+            $member = M("Member")->where("status = 1")->select();
             if (empty($member)) {
                 $this->error('没有需要分红的人数');
             }
             foreach ($member as $v) {
-                $item[]=$v['member_id'];
+                $item[] = $v['member_id'];
             }
-            $where['member_id']=array("in",$item);
+            $where['member_id'] = array("in",$item);
             $list = M('Currency_user')->where($where)->field('currency_id,cu_id,member_id,num')->select();
              
             $count = M('Currency_user')-> where($where)->sum('num');
@@ -116,8 +116,8 @@ class BonusController extends Controller
      */
     private function updateCurrencyNum($currency_id, $member_id, $currency_num)
     {
-        $where['currency_id']= $currency_id;
-        $where['member_id']= $member_id;
+        $where['currency_id'] = $currency_id;
+        $where['member_id'] = $member_id;
         $re = M('Currency_user')-> where($where)->setInc('num', $currency_num);
         if ($re) {
             return  true;
@@ -135,7 +135,7 @@ class BonusController extends Controller
      */
     private function updateMemberRmb($member_id, $currency_num)
     {
-        $where['member_id']= $member_id;
+        $where['member_id'] = $member_id;
         $re = M('Member')-> where($where)->setInc('rmb', $currency_num);
         if ($re) {
             return  true;
@@ -153,11 +153,11 @@ class BonusController extends Controller
     private function getSumMoneyByCurrencyId($type, $currency_id)
     {
         if (!empty($currency_id)) {
-            $currency_id = "currency_id  = ".$currency_id;
+            $currency_id = "currency_id  = " . $currency_id;
         }
         
-        $sql = "SELECT SUM(money)AS money,currency_id  from  ".C("DB_PREFIX")."finance  where type = ".$type." 
-    			and ".$currency_id." GROUP BY  currency_id ";
+        $sql = "SELECT SUM(money)AS money,currency_id  from  " . C("DB_PREFIX") . "finance  where type = " . $type . " 
+    			and " . $currency_id . " GROUP BY  currency_id ";
         $list = M()->query($sql);
         return $list;
     }

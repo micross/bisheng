@@ -8,19 +8,19 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $where['member_id']=$_SESSION['USER_KEY_ID'];
-        $currency_user=M('Currency_user')
-            ->join("left join ".C('DB_PREFIX')."currency on ".C('DB_PREFIX')."currency.currency_id=".C('DB_PREFIX')."currency_user.currency_id")
-            ->field(''.C('DB_PREFIX').'currency_user.*,('.C('DB_PREFIX').'currency_user.num+'.C('DB_PREFIX').'currency_user.forzen_num) as count,'.C('DB_PREFIX').'currency.currency_name,'.C('DB_PREFIX').'currency.currency_mark')
+        $where['member_id'] = $_SESSION['USER_KEY_ID'];
+        $currency_user = M('Currency_user')
+            ->join("left join " . C('DB_PREFIX') . "currency on " . C('DB_PREFIX') . "currency.currency_id=" . C('DB_PREFIX') . "currency_user.currency_id")
+            ->field('' . C('DB_PREFIX') . 'currency_user.*,(' . C('DB_PREFIX') . 'currency_user.num+' . C('DB_PREFIX') . 'currency_user.forzen_num) as count,' . C('DB_PREFIX') . 'currency.currency_name,' . C('DB_PREFIX') . 'currency.currency_mark')
             ->where($where)->order('sort')->select();
         $allmoneys = null;
         foreach ($currency_user as $k => $v) {
-            $Currency_message=$this->getCurrencyMessageById($v['currency_id']);
-            $allmoney=$currency_user[$k]['count']*$Currency_message['new_price'];
-            $allmoneys+=$allmoney;
+            $Currency_message = $this->getCurrencyMessageById($v['currency_id']);
+            $allmoney = $currency_user[$k]['count'] * $Currency_message['new_price'];
+            $allmoneys += $allmoney;
         }
-        $member_rmb=$this->member;
-        $allmoneys=$allmoneys+$member_rmb['count'];
+        $member_rmb = $this->member;
+        $allmoneys = $allmoneys + $member_rmb['count'];
 
         $u_info = M('Member')->field('rmb,forzen_rmb')->where($where)->find();
 
@@ -35,9 +35,9 @@ class UserController extends Controller
         header("Content-type: text/html; charset=utf-8");
         $member_id = session('USER_KEY_ID');
         $M_member = M('Member');
-        $list = $M_member->where(array('member_id'=>$member_id))->find();
-        $list['area_name_city'] = M("Areas")->where(array('area_id'=>$list['city']))->find()['area_name'];
-        $list['area_name_province'] = M("Areas")->where(array('area_id'=>$list['province']))->find()['area_name'];
+        $list = $M_member->where(array('member_id' => $member_id))->find();
+        $list['area_name_city'] = M("Areas")->where(array('area_id' => $list['city']))->find()['area_name'];
+        $list['area_name_province'] = M("Areas")->where(array('area_id' => $list['province']))->find()['area_name'];
         if (IS_POST) {
             $member_id = I('post.member_id', '', 'intval');
             $data['nick'] = I('post.nick');
@@ -45,8 +45,8 @@ class UserController extends Controller
             $data['city'] = intval(I('city'));
             $data['job'] = I('post.job');
             $data['head'] = I('post.head');
-            $data['profile'] =I('post.profile', '', 'html_entity_decode');
-            if ($data['nick']!=$list['nick']) {
+            $data['profile'] = I('post.profile', '', 'html_entity_decode');
+            if ($data['nick'] != $list['nick']) {
                 $where = null;
                 $where['member_id']  = array('NEQ',$member_id);
                 $where['nick'] = $data['nick'];
@@ -66,8 +66,8 @@ class UserController extends Controller
                 $data['info'] = '请填写所在城市';
                 $this->ajaxReturn($data);
             }
-            $r = $M_member->where(array('member_id'=>$member_id))->save($data);
-            if ($r===false) {
+            $r = $M_member->where(array('member_id' => $member_id))->save($data);
+            if ($r === false) {
                 $data['status'] = 2;
                 $data['info'] = '服务器繁忙,请稍后重试';
                 $this->ajaxReturn($data);
@@ -95,35 +95,35 @@ class UserController extends Controller
             $rePwd = I('post.repwd', '', 'md5');
             $M_member = D('Member');
             if (!$M_member->checkPwd($_POST['oldpwd']) || !$M_member->checkPwd($_POST['pwd']) || !$M_member->checkPwd($_POST['repwd'])) {
-                $data['status']=2;
-                $data['info']='请输入6-20位密码';
+                $data['status'] = 2;
+                $data['info'] = '请输入6-20位密码';
                 $this->ajaxReturn($data);
             }
-            if ($rePwd!=$newPwd) {
-                $data['status']=2;
-                $data['info']='两次输入的密码不一致';
+            if ($rePwd != $newPwd) {
+                $data['status'] = 2;
+                $data['info'] = '两次输入的密码不一致';
                 $this->ajaxReturn($data);
             }
-            $r = $M_member->where(array('member_id'=>session('USER_KEY_ID'),'pwd'=>$oldPwd))->find();
+            $r = $M_member->where(array('member_id' => session('USER_KEY_ID'),'pwd' => $oldPwd))->find();
             if (!$r) {
-                $data['status']=2;
-                $data['info']='原始密码输入错误';
+                $data['status'] = 2;
+                $data['info'] = '原始密码输入错误';
                 $this->ajaxReturn($data);
             }
-            if ($newPwd===$oldPwd) {
-                $data['status']=2;
-                $data['info']='新密码不能和密码一样';
+            if ($newPwd === $oldPwd) {
+                $data['status'] = 2;
+                $data['info'] = '新密码不能和密码一样';
                 $this->ajaxReturn($data);
             }
             $data['pwd'] = $newPwd;
-            $s = $M_member->where(array('member_id'=>session('USER_KEY_ID')))->save($data);
+            $s = $M_member->where(array('member_id' => session('USER_KEY_ID')))->save($data);
             if (!$r) {
-                $data['status']=2;
-                $data['info']='服务器繁忙请稍后重试';
+                $data['status'] = 2;
+                $data['info'] = '服务器繁忙请稍后重试';
                 $this->ajaxReturn($data);
             }
-            $data['status']=1;
-            $data['info']='修改成功..请重新登录';
+            $data['status'] = 1;
+            $data['info'] = '修改成功..请重新登录';
             session_destroy();
             $this->ajaxReturn($data);
         } else {
@@ -140,8 +140,8 @@ class UserController extends Controller
      */
     public function rmbChangeCurrency($rmb = 0, $bili = 1, $currency_id)
     {
-        $r[]=M('Member')->where('member_id='.$_SESSION['USER_KEY_ID'])->setDec('rmb', $rmb);
-        $r[]=M('Currency_user')->where('member_id='.$_SESSION['USER_KEY_ID'].' and currency_id='.$currency_id)->setInc('num', $rmb/$bili);
+        $r[] = M('Member')->where('member_id=' . $_SESSION['USER_KEY_ID'])->setDec('rmb', $rmb);
+        $r[] = M('Currency_user')->where('member_id=' . $_SESSION['USER_KEY_ID'] . ' and currency_id=' . $currency_id)->setInc('num', $rmb / $bili);
         if (!empty($r)) {
             $this->success('兑换成功');
         } else {
@@ -154,9 +154,9 @@ class UserController extends Controller
     public function updatePwdTrade(Request $request)
     {
         if (IS_POST) {
-            $M_member=M('Member');
+            $M_member = M('Member');
             $member_id = session('USER_KEY_ID');
-            $info = $M_member->where(array('member_id'=>$member_id))->find();
+            $info = $M_member->where(array('member_id' => $member_id))->find();
             $data['pwd'] = I('post.oldpwd_b');
             $oldpwdtrade = I('post.oldpwdtrade_b');
             $data['pwdtrade'] = I('post.pwdtrade');
@@ -167,7 +167,7 @@ class UserController extends Controller
             $data['idcardPositive'] = null;//判断后赋值
             $data['idcardSide'] = null;//判断后赋值
             $data['idcardHold'] = null;//判断后赋值
-            $Examine= M('Examine_pwdtrade')->where(array('u_id'=>$member_id,'status = 0'))->select();
+            $Examine = M('Examine_pwdtrade')->where(array('u_id' => $member_id,'status = 0'))->select();
             if ($Examine) {
                 $this->error("您已提交过,正在审核中..");
                 return;
@@ -188,15 +188,15 @@ class UserController extends Controller
                 $this->error("两次支付密码输入不一致");
                 return;
             }
-            if ($info['pwd']!=md5($data['pwd'])) {
+            if ($info['pwd'] != md5($data['pwd'])) {
                 $this->error("密码输入错误");
                 return;
             }
-            if ($info['pwdtrade']!=md5($oldpwdtrade)) {
+            if ($info['pwdtrade'] != md5($oldpwdtrade)) {
                 $this->error("原始支付密码输入错误");
                 return;
             }
-            if ($info['pwd']==md5($data['pwdtrade'])) {
+            if ($info['pwd'] == md5($data['pwdtrade'])) {
                 $this->error("支付密码不能与登录密码一致");
                 return;
             }
@@ -214,27 +214,27 @@ class UserController extends Controller
                 return;
             }
             if (empty($info['pic_1'])) {
-                $this->error('图片1'.$upload->getError());
+                $this->error('图片1' . $upload->getError());
                 return;
             }
             if (empty($info['pic_2'])) {
-                $this->error('图片2'.$upload->getError());
+                $this->error('图片2' . $upload->getError());
                 return;
             }
             if (empty($info['pic_3'])) {
-                $this->error('图片3'.$upload->getError());
+                $this->error('图片3' . $upload->getError());
                 return;
             }
-            $idcardPositive = ltrim($upload->rootPath.$info['pic_1']["savepath"].$info['pic_1']["savename"], '.');
-            $idcardSide = ltrim($upload->rootPath.$info['pic_2']["savepath"].$info['pic_2']["savename"], '.');
-            $idcardHold = ltrim($upload->rootPath.$info['pic_3']["savepath"].$info['pic_3']["savename"], '.');
+            $idcardPositive = ltrim($upload->rootPath . $info['pic_1']["savepath"] . $info['pic_1']["savename"], '.');
+            $idcardSide = ltrim($upload->rootPath . $info['pic_2']["savepath"] . $info['pic_2']["savename"], '.');
+            $idcardHold = ltrim($upload->rootPath . $info['pic_3']["savepath"] . $info['pic_3']["savename"], '.');
             $data['pwdtrade'] = I('post.pwdtrade', '', 'md5');
             $data['idcardPositive'] = $idcardPositive;//判断后赋值
             $data['idcardSide'] = $idcardSide;//判断后赋值
             $data['idcardHold'] = $idcardHold;
 
             $r = M('Examine_pwdtrade')->add($data);
-            if ($r ===false) {
+            if ($r === false) {
                 $this->error('服务器繁忙,请稍后重试');
             }
             $this->success('申请成功,审核后会以系统通知通知您', U('User/index'));
@@ -251,29 +251,29 @@ class UserController extends Controller
             $arr = array();
             if ($list) {
                 foreach ($list as $k => $vo) {
-                    if (M('Member')->where(array('email'=>$vo))->find()) {
+                    if (M('Member')->where(array('email' => $vo))->find()) {
                         $data['status'] = 0;
-                        $data['info'] = "您输入的".$vo."邮箱已经注册";
+                        $data['info'] = "您输入的" . $vo . "邮箱已经注册";
                         $this->ajaxReturn($data);
                     } else {
                         $arr[] = $vo;
                     }
                 }
                 foreach ($arr as $vo) {
-                    $url = "http://".$_SERVER['SERVER_NAME'].U('Reg/Reg', array('Member_id'=>session('USER_KEY_ID')));
+                    $url = "http://" . $_SERVER['SERVER_NAME'] . U('Reg/Reg', array('Member_id' => session('USER_KEY_ID')));
                     $content = "<div>";
-                    $content.= "您好，<br><br>请点击链接：<br>";
-                    $content.= "<a target='_blank' href='{$url}' >完成注册邀请</a>";
-                    $content.= "<br><br>如果链接无法点击，请复制并打开以下网址：<br>";
-                    $content.= "<a target='_blank' href='{$url}' >{$url}</a>";
-                    if (setPostEmail($this->config['EMAIL_HOST'], $this->config['EMAIL_USERNAME'], $this->config['EMAIL_PASSWORD'], $this->config['name'].'团队', $vo, $this->config['name'].'团队[注册邀请]', $content)) {
-                        $data['status']=0;
-                        $data['info']="邮箱".$vo."发送失败";
+                    $content .= "您好，<br><br>请点击链接：<br>";
+                    $content .= "<a target='_blank' href='{$url}' >完成注册邀请</a>";
+                    $content .= "<br><br>如果链接无法点击，请复制并打开以下网址：<br>";
+                    $content .= "<a target='_blank' href='{$url}' >{$url}</a>";
+                    if (setPostEmail($this->config['EMAIL_HOST'], $this->config['EMAIL_USERNAME'], $this->config['EMAIL_PASSWORD'], $this->config['name'] . '团队', $vo, $this->config['name'] . '团队[注册邀请]', $content)) {
+                        $data['status'] = 0;
+                        $data['info'] = "邮箱" . $vo . "发送失败";
                         $this->ajaxReturn($data);
                     }
                 }
-                $data['status']=1;
-                $data['info']="发送成功";
+                $data['status'] = 1;
+                $data['info'] = "发送成功";
                 $this->ajaxReturn($data);
             } else {
                 $data['status'] = 0;
@@ -284,12 +284,12 @@ class UserController extends Controller
         //我的邀请
 //         $my_invit = M('Member')->field('email,status,reg_time')->where(array('pid'=>session('USER_KEY_ID')))->select();
         
-        $count = M('Member')->where(array('pid'=>session('USER_KEY_ID')))->count();//根据分类查找数据数量
+        $count = M('Member')->where(array('pid' => session('USER_KEY_ID')))->count();//根据分类查找数据数量
         $page = new \Think\Page($count, 5);//实例化分页类，传入总记录数和每页显示数
         $show = $page->show();//分页显示输出性
-        $my_invit = M('Member')->field('email,status,reg_time')->where(array('pid'=>session('USER_KEY_ID')))->limit($page->firstRow.','.$page->listRows)->select();//时间降序排列，越接近当前时间越高
+        $my_invit = M('Member')->field('email,status,reg_time')->where(array('pid' => session('USER_KEY_ID')))->limit($page->firstRow . ',' . $page->listRows)->select();//时间降序排列，越接近当前时间越高
         foreach ($my_invit as $k => $vo) {
-            $my_invit[$k]['status_name'] = $vo['status']?"已填写个人信息":"未填写个人信息";
+            $my_invit[$k]['status_name'] = $vo['status'] ? "已填写个人信息" : "未填写个人信息";
         }
         
         $this->assign('page', $show);
@@ -298,14 +298,14 @@ class UserController extends Controller
         $info = M('Article')->where('position_id = 121')->find();
         $info1 = M('Article')->where('position_id = 122')->find();
 
-        $info['title']=html_entity_decode($info['title']);
-        $info['content']=html_entity_decode($info['content']);
-        $info1['title']=html_entity_decode($info1['title']);
-        $info1['content']=html_entity_decode($info1['content']);
+        $info['title'] = html_entity_decode($info['title']);
+        $info['content'] = html_entity_decode($info['content']);
+        $info1['title'] = html_entity_decode($info1['title']);
+        $info1['content'] = html_entity_decode($info1['content']);
         $this->assign('info', $info);
         $this->assign('info1', $info1);
         //邀请获得总金额
-        $count=M('Finance')->where("member_id={$_SESSION['USER_KEY_ID']} and type=12")->sum('money');
+        $count = M('Finance')->where("member_id={$_SESSION['USER_KEY_ID']} and type=12")->sum('money');
         $this->assign('count', sprintf("%.2f", $count));
         $this->display();
     }
@@ -325,9 +325,9 @@ class UserController extends Controller
             ->alias('a')
             ->field('a.message_id,a.message_all_id,a.title,a.type,a.add_time,a.status,b.name type_name')
             ->where($where)
-            ->join(''.C('DB_PREFIX').'message_category as b on a.type = b.id')
+            ->join('' . C('DB_PREFIX') . 'message_category as b on a.type = b.id')
             ->order(" a.status asc, a.add_time desc")
-            ->limit($Page->firstRow.','.$Page->listRows)->select();
+            ->limit($Page->firstRow . ',' . $Page->listRows)->select();
         //查询消息类型
         $this->assign('list', $list);// 赋值数据集
         $this->assign('page', $show);// 赋值分页输出
@@ -348,16 +348,16 @@ class UserController extends Controller
             ->alias('a')
             ->field('a.message_id,a.title,a.type,a.add_time,a.content,b.name type_name')
             ->where($where)
-            ->join(C('DB_PREFIX').'message_category as b on a.type = b.id')
+            ->join(C('DB_PREFIX') . 'message_category as b on a.type = b.id')
             ->find();
         //判断状态为0则是 未读 执行语句否则不执行标为已读
-        if ($list['status']==0) {
-            $status = M('Message')->where($where)->save(array('status'=>1));
-            if ($status===false) {
+        if ($list['status'] == 0) {
+            $status = M('Message')->where($where)->save(array('status' => 1));
+            if ($status === false) {
                 $this->error('服务器繁忙请稍后重试');
             }
         }
-        if ($list==false) {
+        if ($list == false) {
             header("HTTP/1.0 404 Not Found");
             $this->display('Public:404');
             return;
@@ -369,7 +369,7 @@ class UserController extends Controller
             ->alias('a')
             ->field('a.message_id,a.message_all_id,a.title,a.type,a.add_time,a.content,b.name type_name')
             ->where($where)
-            ->join(C('DB_PREFIX').'message_category as b on a.type = b.id')
+            ->join(C('DB_PREFIX') . 'message_category as b on a.type = b.id')
             ->order(' a.add_time desc ')
             ->limit(4)
             ->select();
@@ -391,9 +391,9 @@ class UserController extends Controller
         $where['uid'] = session('USER_KEY_ID');
         //判断post是否为空
         if (IS_POST) {
-            $info['bname']=I("new_label");
-            $info['address']=I("shi");
-            $info['cardnum']=I("account");
+            $info['bname'] = I("new_label");
+            $info['address'] = I("shi");
+            $info['cardnum'] = I("account");
             $info['bankname'] = I("bank");
             $info['cardname'] = $this->auth['name'];
             $info['uid'] = session('USER_KEY_ID');
@@ -429,7 +429,7 @@ class UserController extends Controller
                 $this->ajaxReturn($data);
             }
             $re = $bank->add($info);
-            if ($re>0) {
+            if ($re > 0) {
                 $data['status']  = 1;
                 $data['info'] = '操作成功';
                 $this->ajaxReturn($data);
@@ -451,30 +451,30 @@ class UserController extends Controller
         $member = M('Member');
         $article = M('article');
         $area = M('Areas');
-        $withdraw =M('Withdraw');
+        $withdraw = M('Withdraw');
         
         $where['uid'] = session('USER_KEY_ID');
         //提示文章显示
-        $art['content'] = html_entity_decode($article->where(C('DB_PREFIX').'article.position_id = 120')->find()['content']);
+        $art['content'] = html_entity_decode($article->where(C('DB_PREFIX') . 'article.position_id = 120')->find()['content']);
         //查找省份
         $province = $area->where('parent_id = 1')->select();
         //查找当前登录人的提现地址
-        $field=C('DB_PREFIX')."bank.*,b.area_name as barea_name,a.area_name as aarea_name";
-        $bank_info = $bank->field($field)->join(C('DB_PREFIX')."areas as b ON b.area_id =".C('DB_PREFIX')."bank.address")
-            ->join(C('DB_PREFIX')."areas as a ON a.area_id = b.parent_id ")->where($where)->select();
+        $field = C('DB_PREFIX') . "bank.*,b.area_name as barea_name,a.area_name as aarea_name";
+        $bank_info = $bank->field($field)->join(C('DB_PREFIX') . "areas as b ON b.area_id =" . C('DB_PREFIX') . "bank.address")
+            ->join(C('DB_PREFIX') . "areas as a ON a.area_id = b.parent_id ")->where($where)->select();
         //检测是否有10个地址
         $count = $bank->where($where)->count();
-        if ($count<10) {
+        if ($count < 10) {
             $this->assign("num", 1);
         } else {
             $this->assign("num", 2);
         }
         //显示提现记录
         $draw_info = $withdraw
-            ->field(C('DB_PREFIX')."withdraw.withdraw_id, ".C('DB_PREFIX')."bank.cardnum, ".C('DB_PREFIX')."withdraw.all_money, ".C('DB_PREFIX')."withdraw.money, ".C('DB_PREFIX')."withdraw.add_time, ".C('DB_PREFIX')."withdraw.status")
-            ->join(C('DB_PREFIX')."bank ON ". C('DB_PREFIX')."withdraw.bank_id =".C('DB_PREFIX')."bank.id")
-            ->where(C('DB_PREFIX')."withdraw.uid ={$_SESSION['USER_KEY_ID']}")
-            ->order(C('DB_PREFIX')."withdraw.add_time desc")
+            ->field(C('DB_PREFIX') . "withdraw.withdraw_id, " . C('DB_PREFIX') . "bank.cardnum, " . C('DB_PREFIX') . "withdraw.all_money, " . C('DB_PREFIX') . "withdraw.money, " . C('DB_PREFIX') . "withdraw.add_time, " . C('DB_PREFIX') . "withdraw.status")
+            ->join(C('DB_PREFIX') . "bank ON " . C('DB_PREFIX') . "withdraw.bank_id =" . C('DB_PREFIX') . "bank.id")
+            ->where(C('DB_PREFIX') . "withdraw.uid ={$_SESSION['USER_KEY_ID']}")
+            ->order(C('DB_PREFIX') . "withdraw.add_time desc")
             ->limit(10)
             ->select();
         //显示可用余额
@@ -494,25 +494,25 @@ class UserController extends Controller
     public function delete(Request $request)
     {
         $bank = M('Bank');
-        $id=intval(I('post.id'));
+        $id = intval(I('post.id'));
         //查询选择地址是否有提现记录
         $count = M('Withdraw')->where(" bank_id = {$id}")->count();
         //有记录，不许删除
         if ($count != 0) {
-            $arr['status']=-1;
-            $arr['info']="该地址尚有提现记录，无法删除！";
+            $arr['status'] = -1;
+            $arr['info'] = "该地址尚有提现记录，无法删除！";
             $this->ajaxReturn($arr);
         }
         
         $re = $bank->delete($id);
         
         if ($re) {
-            $arr['status']=1;
-            $arr['info']="操作成功";
+            $arr['status'] = 1;
+            $arr['info'] = "操作成功";
             $this->ajaxReturn($arr);
         } else {
-            $arr['status']=0;
-            $arr['info']="服务器繁忙,请稍后重试";
+            $arr['status'] = 0;
+            $arr['info'] = "服务器繁忙,请稍后重试";
             $this->ajaxReturn($arr);
         }
     }
@@ -524,9 +524,9 @@ class UserController extends Controller
     {
         $withdraw = M('Withdraw');
         $member = M('Member');
-        $da['key']="fee";
+        $da['key'] = "fee";
         //查询手续率所在表
-        $list=M("Config")->where($da)->find();
+        $list = M("Config")->where($da)->find();
         //查找member_id对应的交易密码
         $where['member_id'] = session('USER_KEY_ID');
         //查找member表uid对应信息（交易密码，可以金额，冻结金额）
@@ -536,9 +536,9 @@ class UserController extends Controller
             $data['bank_id'] = I('post.select_bank');
             $data['all_money'] = floatval(I('post.money'));//提现金额
             $data['pwdtrade'] = md5(I('post.pwdtrade'));
-            if ($_POST['code']!=$_SESSION['code']) {
-                $info['status']=11;
-                $info['info']='验证码不正确';
+            if ($_POST['code'] != $_SESSION['code']) {
+                $info['status'] = 11;
+                $info['info'] = '验证码不正确';
                 $this->ajaxReturn($info);
             }
             if (empty($data['all_money'])) {
@@ -547,7 +547,7 @@ class UserController extends Controller
                 $this->ajaxReturn($info);
             }
             //单笔在100至50000在之间
-            if ($data['all_money']<10||$data['all_money']>500000) {
+            if ($data['all_money'] < 10 || $data['all_money'] > 500000) {
                 $info['status'] = 2;
                 $info['info'] = "提现金额超出限制";
                 $this->ajaxReturn($info);
@@ -578,25 +578,25 @@ class UserController extends Controller
                 $this->ajaxReturn($info);
             }
             
-            if ($data['all_money']>$mem_data['rmb']) {
+            if ($data['all_money'] > $mem_data['rmb']) {
                 $info['status'] = 6;
                 $info['info'] = "账户余额不足";
                 $this->ajaxReturn($info);
             }
 
-            if ($mem_data['rmb']<100) {
+            if ($mem_data['rmb'] < 100) {
                 $info['status'] = 7;
                 $info['info'] = "现金少于100，不能提现";
                 $this->ajaxReturn($info);
             }
             //应付手续费
-            $data['withdraw_fee'] = floatval(I('post.money'))*  $list['value']*0.01;
+            $data['withdraw_fee'] = floatval(I('post.money')) *  $list['value'] * 0.01;
             //实际金额
             $data['money'] = floatval(I('post.money')) - $data['withdraw_fee'];
             //加时间
             $data['add_time'] = time();
             //加订单号
-            $data['order_num'] = session('USER_KEY_ID')."-".$data['add_time'];
+            $data['order_num'] = session('USER_KEY_ID') . "-" . $data['add_time'];
             //加uid辨明身份
             $data['uid'] = session('USER_KEY_ID');
             //保存可用金额修改信息
@@ -635,18 +635,18 @@ class UserController extends Controller
         //单日0时0分
         $time = strtotime(date('Y-M-d', time()));
         //从0时0分到当前时间
-        $where['add_time']=array("between",array($time,time()));
+        $where['add_time'] = array("between",array($time,time()));
 
         $where['uid'] = $_SESSION['USER_KEY_ID'];//
         //总钱数
         $money = M('Withdraw')->where($where)->sum('all_money');
         //之前的总提现数是否超过了500000
-        if ($money>=500000) {
+        if ($money >= 500000) {
             return false;
         }
         //本次提现是否会超出500000
-        $money_now = $money+$num;
-        if ($money_now>=500000) {
+        $money_now = $money + $num;
+        if ($money_now >= 500000) {
             return false;
         }
         return true;
@@ -673,7 +673,7 @@ class UserController extends Controller
             $this->ajaxReturn($data);
         }
         //查状态是否在可操作的状态
-        if ($money['status']!=3) {
+        if ($money['status'] != 3) {
             $data['status'] = 5;
             $data['info'] = "请勿重复操作";
             $this->ajaxReturn($data);
@@ -707,30 +707,30 @@ class UserController extends Controller
      */
     public function pay(Request $request)
     {
-        $config=$this->config;
-        $member=$this->member;
-        $order_num=$this->getPaycountByName($member['name']);
+        $config = $this->config;
+        $member = $this->member;
+        $order_num = $this->getPaycountByName($member['name']);
         //随机数
-        $num =  0.01*rand(10, 99);
-        $fee=floatval($config['pay_fee']+0.01*$order_num+$num);
+        $num =  0.01 * rand(10, 99);
+        $fee = floatval($config['pay_fee'] + 0.01 * $order_num + $num);
         //支付表
-        $where['member_name']=$this->member['name'];
-        $where['member_id']=$this->member['member_id'];
+        $where['member_name'] = $this->member['name'];
+        $where['member_id'] = $this->member['member_id'];
         $where['type'] = array('NEQ',3);
         //分页
         $pay = M('Pay'); // 实例化User对象
         $count = $pay->where($where)->count();// 查询满足要求的总记录数
         $Page  = new \Think\Page($count, 5);// 实例化分页类 传入总记录数和每页显示的记录数(25)
         $show       = $Page->show();// 分页显示输出
-        $list=$pay->where($where)->order('pay_id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
+        $list = $pay->where($where)->order('pay_id desc')->limit($Page->firstRow . ',' . $Page->listRows)->select();
         foreach ($list as $k => $v) {
-            $list[$k]['status']=payStatus($v['status']);
+            $list[$k]['status'] = payStatus($v['status']);
         }
         
         $bank = M('Website_bank')->where('status = 1')->select();
         //充值说明
-        $art=M('Article')->where('article_id=102')->find();
-        $art['content']=html_entity_decode($art['content']);
+        $art = M('Article')->where('article_id=102')->find();
+        $art['content'] = html_entity_decode($art['content']);
         $this->assign('art', $art);
         $this->assign('page', $show);
         $this->assign('bank', $bank);
@@ -743,10 +743,10 @@ class UserController extends Controller
      */
     public function getCity(Request $request)
     {
-        $area=M("Areas");
-        $area_id=intval($_POST['id']);
+        $area = M("Areas");
+        $area_id = intval($_POST['id']);
         if (!empty($area_id)) {
-            $city_list=$area->where("parent_id='$area_id'")->select();
+            $city_list = $area->where("parent_id='$area_id'")->select();
 //           foreach ($city_list as $vo) {
 //               $op[] = '<option value="'.$vo['area_id'].'">'.$vo['area_name'].'</option>'; ;
 //           }
@@ -768,16 +768,16 @@ class UserController extends Controller
         // 上传文件
         $info   =   $upload->upload();
         if (!$info) {// 上传错误提示错误信息
-            $arr['status']=0;
-            $arr['info']=$upload->getError();
+            $arr['status'] = 0;
+            $arr['info'] = $upload->getError();
             $this->ajaxReturn($arr);
         } else {
             // 上传成功
-            $pic = ltrim($upload->rootPath.$info['Filedata']["savepath"].$info['Filedata']["savename"], '.');
+            $pic = ltrim($upload->rootPath . $info['Filedata']["savepath"] . $info['Filedata']["savename"], '.');
 //            $pic_1=$info['head']['savepath'].$info['head']['savename'];
 //            $pic=ltrim($pic_1,".");
-            $arr['status']=1;
-            $arr['info']=$pic;
+            $arr['status'] = 1;
+            $arr['info'] = $pic;
             $this->ajaxReturn($arr);
         }
     }
@@ -797,9 +797,9 @@ class UserController extends Controller
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
         
         $list = M('Issue_log')
-        ->field(C('DB_PREFIX').'issue_log.*,'.C('DB_PREFIX').'issue.id,'.C('DB_PREFIX').'issue.currency_id,'.C('DB_PREFIX').'issue.title')
-        ->join(C('DB_PREFIX').'issue on '.C('DB_PREFIX').'issue.id = '.C('DB_PREFIX').'issue_log.iid')
-        ->where(C('DB_PREFIX')."issue_log.uid = {$member_id}")->limit($Page->firstRow.','.$Page->listRows)->select();
+        ->field(C('DB_PREFIX') . 'issue_log.*,' . C('DB_PREFIX') . 'issue.id,' . C('DB_PREFIX') . 'issue.currency_id,' . C('DB_PREFIX') . 'issue.title')
+        ->join(C('DB_PREFIX') . 'issue on ' . C('DB_PREFIX') . 'issue.id = ' . C('DB_PREFIX') . 'issue_log.iid')
+        ->where(C('DB_PREFIX') . "issue_log.uid = {$member_id}")->limit($Page->firstRow . ',' . $Page->listRows)->select();
         
         $this->assign('page', $show);// 赋值分页输出
         $this ->assign('list', $list);

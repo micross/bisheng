@@ -10,7 +10,7 @@ class CurrencyController extends Controller
     public function _initialize()
     {
         parent::_initialize();
-        $this->currency=M('Currency');
+        $this->currency = M('Currency');
     }
     
     /**
@@ -19,36 +19,36 @@ class CurrencyController extends Controller
     public function tibi_index(Request $request)
     {
         
-        $cuid=I('cuid');
-        $email=I('email');
+        $cuid = I('cuid');
+        $email = I('email');
         if (!empty($cuid)) {
-            $where[C("DB_PREFIX")."tibi.currency_id"]=$cuid;
+            $where[C("DB_PREFIX") . "tibi.currency_id"] = $cuid;
             $this->assign("id", $cuid);
         }
         if (!empty($email)) {
-            $name=M("Member")->where("email='{$email}'")->find();
-            $where[C("DB_PREFIX")."tibi.user_id"]=$name['member_id'];
+            $name = M("Member")->where("email='{$email}'")->find();
+            $where[C("DB_PREFIX") . "tibi.user_id"] = $name['member_id'];
         }
-        $where[C("DB_PREFIX")."tibi.status"]=array("in",array(0,1));
+        $where[C("DB_PREFIX") . "tibi.status"] = array("in",array(0,1));
         
-        $field=C("DB_PREFIX")."tibi.*,".C("DB_PREFIX")."member.email,".C("DB_PREFIX")."currency.currency_name";
-        $count      = M("Tibi")->where($where)->join(C("DB_PREFIX")."member on ".C("DB_PREFIX")."tibi.user_id=".C("DB_PREFIX")."member.member_id")
-        ->join(C("DB_PREFIX")."currency on ".C("DB_PREFIX")."tibi.currency_id=".C("DB_PREFIX")."currency.currency_id")->count();// 查询满足要求的总记录数
+        $field = C("DB_PREFIX") . "tibi.*," . C("DB_PREFIX") . "member.email," . C("DB_PREFIX") . "currency.currency_name";
+        $count      = M("Tibi")->where($where)->join(C("DB_PREFIX") . "member on " . C("DB_PREFIX") . "tibi.user_id=" . C("DB_PREFIX") . "member.member_id")
+        ->join(C("DB_PREFIX") . "currency on " . C("DB_PREFIX") . "tibi.currency_id=" . C("DB_PREFIX") . "currency.currency_id")->count();// 查询满足要求的总记录数
         $Page       = new \Think\Page($count, 10);// 实例化分页类 传入总记录数和每页显示的记录数(25)
         //给分页传参数
-        setPageParameter($Page, array('cuid'=>I("cuid"),'email'=>$name['member_id']));
+        setPageParameter($Page, array('cuid' => I("cuid"),'email' => $name['member_id']));
         $show       = $Page->show();// 分页显示输出
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
 
-        $list = M("Tibi")->field($field)->where($where)->join(C("DB_PREFIX")."member on ".C("DB_PREFIX")."tibi.user_id=".C("DB_PREFIX")."member.member_id")
-        ->join(C("DB_PREFIX")."currency on ".C("DB_PREFIX")."tibi.currency_id=".C("DB_PREFIX")."currency.currency_id")->limit($Page->firstRow.','.$Page->listRows)->select();
+        $list = M("Tibi")->field($field)->where($where)->join(C("DB_PREFIX") . "member on " . C("DB_PREFIX") . "tibi.user_id=" . C("DB_PREFIX") . "member.member_id")
+        ->join(C("DB_PREFIX") . "currency on " . C("DB_PREFIX") . "tibi.currency_id=" . C("DB_PREFIX") . "currency.currency_id")->limit($Page->firstRow . ',' . $Page->listRows)->select();
         $this->assign('list', $list);// 赋值数据集
         $this->assign('page', $show);// 赋值分页输出
         
         
         //读取币种表
         
-        $curr=M("Currency")->select();
+        $curr = M("Currency")->select();
         $this->assign("curr", $curr);
         
         $this->display();
@@ -59,39 +59,39 @@ class CurrencyController extends Controller
      */
     public function chongzhi_index(Request $request)
     {
-        $cuid=I('cuid');
-        $email=I('email');
+        $cuid = I('cuid');
+        $email = I('email');
     
         if (!empty($cuid)) {
-            $where[C("DB_PREFIX")."tibi.currency_id"]=I("cuid");
+            $where[C("DB_PREFIX") . "tibi.currency_id"] = I("cuid");
             $this->assign("id", I("cuid"));
         }
         if (!empty($cuid)) {
-            $name=M("Member")->where("email='{$email}'")->find();
-            $where[C("DB_PREFIX")."tibi.user_id"]=$name['member_id'];
+            $name = M("Member")->where("email='{$email}'")->find();
+            $where[C("DB_PREFIX") . "tibi.user_id"] = $name['member_id'];
         }
-        $where[C("DB_PREFIX")."tibi.status"]=array("in",array(2,3));
+        $where[C("DB_PREFIX") . "tibi.status"] = array("in",array(2,3));
             
-        $field=C("DB_PREFIX")."tibi.*,".C("DB_PREFIX")."member.email,".C("DB_PREFIX")."currency.currency_name";
+        $field = C("DB_PREFIX") . "tibi.*," . C("DB_PREFIX") . "member.email," . C("DB_PREFIX") . "currency.currency_name";
         
         $count      = M("Tibi")
         ->where($where)
-        ->join(C("DB_PREFIX")."member on ".C("DB_PREFIX")."tibi.user_id= ".C("DB_PREFIX")."member.member_id")
-        ->join(C("DB_PREFIX")."currency on ".C("DB_PREFIX")."tibi.currency_id=".C("DB_PREFIX")."currency.currency_id")->count();// 查询满足要求的总记录数
+        ->join(C("DB_PREFIX") . "member on " . C("DB_PREFIX") . "tibi.user_id= " . C("DB_PREFIX") . "member.member_id")
+        ->join(C("DB_PREFIX") . "currency on " . C("DB_PREFIX") . "tibi.currency_id=" . C("DB_PREFIX") . "currency.currency_id")->count();// 查询满足要求的总记录数
         $Page       = new \Think\Page($count, 10);// 实例化分页类 传入总记录数和每页显示的记录数(25)
         //给分页传参数
-        setPageParameter($Page, array('cuid'=>$cuid,'email'=>$email));
+        setPageParameter($Page, array('cuid' => $cuid,'email' => $email));
         $show       = $Page->show();// 分页显示输出
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
-        $list = M("Tibi")->field($field)->where($where)->join(C("DB_PREFIX")."member on ".C("DB_PREFIX")."tibi.user_id=".C("DB_PREFIX")."member.member_id")
-        ->join(C("DB_PREFIX")."currency on ".C("DB_PREFIX")."tibi.currency_id=".C("DB_PREFIX")."currency.currency_id")->limit($Page->firstRow.','.$Page->listRows)->select();
+        $list = M("Tibi")->field($field)->where($where)->join(C("DB_PREFIX") . "member on " . C("DB_PREFIX") . "tibi.user_id=" . C("DB_PREFIX") . "member.member_id")
+        ->join(C("DB_PREFIX") . "currency on " . C("DB_PREFIX") . "tibi.currency_id=" . C("DB_PREFIX") . "currency.currency_id")->limit($Page->firstRow . ',' . $Page->listRows)->select();
         $this->assign('list', $list);// 赋值数据集
         $this->assign('page', $show);// 赋值分页输出
     
     
         //读取币种表
     
-        $curr=M("Currency")->select();
+        $curr = M("Currency")->select();
         $this->assign("curr", $curr);
     
         $this->display();
@@ -101,34 +101,34 @@ class CurrencyController extends Controller
     {
         if (IS_POST) {
             if (!empty($_POST['currency_id'])) {
-                $cu=M("Currency")->where("currency_name='{$_POST['currency_name']}' and currency_id <> '{$_POST['currency_id']}'")->find();
+                $cu = M("Currency")->where("currency_name='{$_POST['currency_name']}' and currency_id <> '{$_POST['currency_id']}'")->find();
             } else {
-                $cu=M("Currency")->where("currency_name='{$_POST['currency_name']}'")->find();
+                $cu = M("Currency")->where("currency_name='{$_POST['currency_name']}'")->find();
             }
             if (!empty($cu)) {
                 $this->error("币种名称已经存在");
             }
             
             foreach ($_POST as $k => $v) {
-                $data[$k]=$v;
+                $data[$k] = $v;
             }
-            $data['add_time']=time();
+            $data['add_time'] = time();
             if ($_FILES["Filedata"]["tmp_name"]) {
-                $data['currency_logo']=$this->upload($_FILES["Filedata"]);
+                $data['currency_logo'] = $this->upload($_FILES["Filedata"]);
             }
             
             if (!empty($_POST['currency_id'])) {
-                $rs=$this->currency->save($data);
-                $currency_id=$data['currency_id'];
+                $rs = $this->currency->save($data);
+                $currency_id = $data['currency_id'];
             } else {
-                $rs=$this->currency->add($data);
-                $currency_id=$rs;
+                $rs = $this->currency->add($data);
+                $currency_id = $rs;
             }
             if ($_FILES["pic"]["tmp_name"]) {
-                $te['pic']=$this->upload($_FILES["pic"]);
-                $te['currency_id']=$currency_id;
-                $te['add_time']=time();
-                $te['status']=0;
+                $te['pic'] = $this->upload($_FILES["pic"]);
+                $te['currency_id'] = $currency_id;
+                $te['add_time'] = time();
+                $te['status'] = 0;
                 M('Currency_pic')->add($te);
             }
             if ($rs) {
@@ -138,13 +138,13 @@ class CurrencyController extends Controller
             }
         } else {
             if (!empty($_GET['currency_id'])) {
-                $list=$this->currency->where('currency_id='.$_GET['currency_id'])->find();
+                $list = $this->currency->where('currency_id=' . $_GET['currency_id'])->find();
                 $this->assign('list', $list);
-                $currency_pic=M('Currency_pic')->where('currency_id='.$_GET['currency_id'])->order('add_time')->select();
+                $currency_pic = M('Currency_pic')->where('currency_id=' . $_GET['currency_id'])->order('add_time')->select();
                 $this->assign('pic', $currency_pic);
             }
             
-            $currency_currency=M("Currency")->where("currency_id <> '{$_GET['currency_id']}'")->select();
+            $currency_currency = M("Currency")->where("currency_id <> '{$_GET['currency_id']}'")->select();
             $this->assign("currency_currency", $currency_currency);
             
             $this->display();
@@ -152,9 +152,9 @@ class CurrencyController extends Controller
     }
     public function index(Request $request)
     {
-        $list=$this->currency->select();
+        $list = $this->currency->select();
         foreach ($list as $k => $v) {
-            $list[$k]['qianbao_balance']=$this->get_qianbao_balance($v);
+            $list[$k]['qianbao_balance'] = $this->get_qianbao_balance($v);
         }
         $this->assign('list', $list);
         $this->assign('empty', '暂无数据');
@@ -163,7 +163,7 @@ class CurrencyController extends Controller
     public function shangxian(Request $request)
     {
         if (!empty($_GET['currency_id'])) {
-            $rs=M('Currency')->where('currency_id='.$_GET['currency_id'])->setField('is_lock', 0);
+            $rs = M('Currency')->where('currency_id=' . $_GET['currency_id'])->setField('is_lock', 0);
         }
         if ($rs) {
             $this->success('操作成功');
@@ -177,14 +177,14 @@ class CurrencyController extends Controller
         if (empty($_GET['currency_id'])) {
             $this->error('删除数据不存在');
         }
-        $rs=M('Currency_user')->where('currency_id='.$_GET['currency_id'])->sum("num");
+        $rs = M('Currency_user')->where('currency_id=' . $_GET['currency_id'])->sum("num");
     
-        if ($rs>0) {
+        if ($rs > 0) {
             $this->error('该币种尚有用户持有，不能删除');
         }
     
-        $list=$this->currency->where('currency_id='.$_GET['currency_id'])->delete();
-        M('Currency_user')->where('currency_id='.$_GET['currency_id'])->delete();
+        $list = $this->currency->where('currency_id=' . $_GET['currency_id'])->delete();
+        M('Currency_user')->where('currency_id=' . $_GET['currency_id'])->delete();
         if ($list) {
             $this->success('删除成功');
         } else {
@@ -194,8 +194,8 @@ class CurrencyController extends Controller
     //删除对应的币种详情图片
     public function delCurrencyPic(Request $request)
     {
-        $id=I('get.id');
-        $list=M('Currency_pic')->where('id='.$id)->delete();
+        $id = I('get.id');
+        $list = M('Currency_pic')->where('id=' . $id)->delete();
         if ($list) {
             $this->success('删除成功');
         } else {
@@ -210,45 +210,45 @@ class CurrencyController extends Controller
      */
     public function set_member_currencyForQianbao(Request $request)
     {
-        $cuid=intval(I("cuid"));
+        $cuid = intval(I("cuid"));
         if (empty($cuid)) {
             $this->error("无效货币参数", U("Currency/index"));
             exit();
         }
-        $currency=M("Currency")->where("currency_id='$cuid'")->find();
+        $currency = M("Currency")->where("currency_id='$cuid'")->find();
         
-        $currency['balance']=$this->get_qianbao_balance($currency);
+        $currency['balance'] = $this->get_qianbao_balance($currency);
     
         if (empty($currency)) {
             $this->error("无效货币", U("Currency/index"));
             exit();
         }
         if (IS_POST) {
-            $admin=M("Admin")->where("admin_id='{$_SESSION['admin_userid']}'")->find();
+            $admin = M("Admin")->where("admin_id='{$_SESSION['admin_userid']}'")->find();
             if (empty($_POST['password'])) {
                 $this->error("请输入管理员密码");
             }
-            if (md5($_POST['password'])!=$admin['password']) {
+            if (md5($_POST['password']) != $admin['password']) {
                 $this->error("您输入的管理员密码错误");
             }
             
-            $username=I("name");//用户名
-            $num=I('num');//数量
+            $username = I("name");//用户名
+            $num = I('num');//数量
             if (empty($username)) {
                 $this->error("请输入用户名");
                 exit();
             }
-            if (empty($num)||!is_numeric($num)) {
+            if (empty($num) || !is_numeric($num)) {
                 $this->error("数量请输入数字类型");
                 exit();
             }
-            $member=M("Member")->where("email='$username'")->find();
+            $member = M("Member")->where("email='$username'")->find();
             if (empty($member)) {
                 $this->error("查无此人，请核实");
                 exit();
             }
             
-            $qa=M("Qianbao_address")->where("user_id='{$member['member_id']}' and currency_id='{$cuid}'")->find();
+            $qa = M("Qianbao_address")->where("user_id='{$member['member_id']}' and currency_id='{$cuid}'")->find();
             if (empty($qa['qianbao_url'])) {
                 $this->error("此用户没有绑定提币地址，无法转账");
                 exit();
@@ -258,22 +258,22 @@ class CurrencyController extends Controller
                 $this->error("提币地址不是一个有效地址");
                 exit();
             }
-            $num=floatval($num);
-            $data['fee']=0;//手续费
-            $data['currency_id']=$cuid;
-            $data['user_id']=$qa['user_id'];
-            $data['url']=$qa['qianbao_url'];
-            $data['name']=$qa['name'];
-            $data['num']=$num;
-            $data['actual']=$num;//实际到账价格
-            $data['status']=0;
-            $data['add_time']=time();
+            $num = floatval($num);
+            $data['fee'] = 0;//手续费
+            $data['currency_id'] = $cuid;
+            $data['user_id'] = $qa['user_id'];
+            $data['url'] = $qa['qianbao_url'];
+            $data['name'] = $qa['name'];
+            $data['num'] = $num;
+            $data['actual'] = $num;//实际到账价格
+            $data['status'] = 0;
+            $data['add_time'] = time();
             
-            $tibi=$this->qianbao_tibi($qa['qianbao_url'], $num, $currency);//提币程序
+            $tibi = $this->qianbao_tibi($qa['qianbao_url'], $num, $currency);//提币程序
             
             if ($tibi) {//成功写入数据库
-                $data['ti_id']=$tibi;
-                $re=M("Tibi")->add($data);
+                $data['ti_id'] = $tibi;
+                $re = M("Tibi")->add($data);
                 //减钱操作
 //              M("Currency_user")->where("member_id='{$_SESSION['USER_KEY_ID']}' and currency_id='$cuid'")->setDec("num",$num);
                 $this->success("转账成功，请耐心等待", U('Currency/index'));
@@ -319,7 +319,7 @@ class CurrencyController extends Controller
         $bitcoin = new \Bitcoin($currency['rpc_user'], $currency['rpc_pwd'], $currency['rpc_url'], $currency['port_number']);
         $bitcoin->walletlock();//强制上锁
         $bitcoin->walletpassphrase($currency['qianbao_key'], 20);
-        $id=$bitcoin->sendtoaddress($url, $money);
+        $id = $bitcoin->sendtoaddress($url, $money);
         $bitcoin->walletlock();
         return $id;
     }

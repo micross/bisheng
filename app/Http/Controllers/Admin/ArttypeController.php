@@ -22,9 +22,9 @@ class ArttypeController extends Controller
     
         if (IS_POST) {
             //确定分类别
-            $data['parent_id']= 6;
+            $data['parent_id'] = 6;
             //分类名称
-            $data['name']=I('name');
+            $data['name'] = I('name');
             //关键字
             $data['keywords'] =  I('keyword', '', 'html_entity_decode');
             //排序
@@ -38,7 +38,7 @@ class ArttypeController extends Controller
             } else {
                 $re = $art_cat->add($data);
             }
-            if ($re===false) {
+            if ($re === false) {
                 $this->error('操作失败');
                 return;
             } else {

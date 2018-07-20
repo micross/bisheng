@@ -8,9 +8,9 @@ class DividendController extends Controller
 {
     public function index(Request $request)
     {
-        $config=M('Dividend_config')->select();
+        $config = M('Dividend_config')->select();
         foreach ($config as $k => $v) {
-               $list[$v['name']]=$v['value'];
+               $list[$v['name']] = $v['value'];
         }
         $currency = M('Currency')->field('currency_id,currency_name')->select();
         $this->assign('config', $list);
@@ -22,7 +22,7 @@ class DividendController extends Controller
     public function updateCofig(Request $request)
     {
         foreach ($_POST as $k => $v) {
-            $rs[]=M('Dividend_config')->where("name='{$k}'")->setField('value', $v);
+            $rs[] = M('Dividend_config')->where("name='{$k}'")->setField('value', $v);
         }
         if ($rs) {
             $this->success('配置修改成功');

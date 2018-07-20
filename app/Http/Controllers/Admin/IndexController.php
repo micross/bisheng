@@ -9,29 +9,29 @@ class IndexController extends Controller
     public function index(Request $request)
     {
         $uid = $_SESSION['admin_userid'];
-        $admin_user=M("Admin")->where("admin_id='$uid'")->find();
+        $admin_user = M("Admin")->where("admin_id='$uid'")->find();
         
-        $config=M("Config")->field('key,value')->select();
+        $config = M("Config")->field('key,value')->select();
         foreach ($config as $k => $v) {
-            $config[$v['key']]=$v['value'];
+            $config[$v['key']] = $v['value'];
         }
 
         $URL_MODULE_MAP = array_keys(C('URL_MODULE_MAP'))[0];
-        $adminquanxian=M("Admin")->field('Nav')->where("admin_id='{$_SESSION['admin_userid']}'")->find();
-        $rules=$adminquanxian['nav'];
+        $adminquanxian = M("Admin")->field('Nav')->where("admin_id='{$_SESSION['admin_userid']}'")->find();
+        $rules = $adminquanxian['nav'];
         if (empty($rules)) {
-            $this->error('此账号尚未分配权限', $URL_MODULE_MAP.'/Login/login');
+            $this->error('此账号尚未分配权限', $URL_MODULE_MAP . '/Login/login');
         }
-        $rules=explode(',', $rules);
+        $rules = explode(',', $rules);
         foreach ($rules as $k => $v) {
-            $list[]=M("Nav")->where('nav_id='.$v)->find();
+            $list[] = M("Nav")->where('nav_id=' . $v)->find();
         }
         foreach ($list as $k => $v) {
-            $v['nav_url'] = '/'.$URL_MODULE_MAP.$v['nav_url'];
-            $value[$v['cat_id']][]=$v;
+            $v['nav_url'] = '/' . $URL_MODULE_MAP . $v['nav_url'];
+            $value[$v['cat_id']][] = $v;
         }
         foreach ($value as $k => $v) {
-            $this->assign($k."_nav", $v);
+            $this->assign($k . "_nav", $v);
         }
         $this->assign('URL_MODULE_MAP', $URL_MODULE_MAP);
                 
@@ -45,9 +45,9 @@ class IndexController extends Controller
     {
         //统计全站信息
         //总人数
-        $member_count=M('Member')->count();
+        $member_count = M('Member')->count();
         //众筹总数量
-        $issue_count=M('issue')->field("sum(num)-sum(deal) as count")->find();
+        $issue_count = M('issue')->field("sum(num)-sum(deal) as count")->find();
         //人民币收入
         $pay_money_count = M('pay')->where("status = 1 ")->sum('count');
         //人民币支出
@@ -60,7 +60,7 @@ class IndexController extends Controller
         $currency_u_info = M('currency')
                         ->alias('a')
                         ->field('a.currency_name,sum(b.num) as num,sum(b.forzen_num) as forzen_num')
-                        ->join("left join ".C("DB_PREFIX")."currency_user AS b on a.currency_id = b.currency_id")
+                        ->join("left join " . C("DB_PREFIX") . "currency_user AS b on a.currency_id = b.currency_id")
                         ->group('a.currency_id')
                         ->select();
         $this->assign('member', $member_count);
@@ -113,7 +113,7 @@ class IndexController extends Controller
         //去除空格
         $path = preg_replace('/(\/){2,}|{\\\}{1,}/', '/', $path);
         //得到完整目录
-        $path.= $fileName;
+        $path .= $fileName;
         //判断此文件是否为一个文件目录
         if (is_dir($path)) {
             //打开文件

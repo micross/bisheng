@@ -14,7 +14,7 @@ class OauthController extends Controller
                 $app_id = C('SZ_QQ_APP_ID');
                 $scope = C('SZ_QQ_SCOPE');
                 $callback = C('SZ_QQ_CALLBACK');
-                $sns = new \Common\Api\QQConnect;
+                $sns = new \Common\Api\QQConnect();
                 $sns->login($app_id, $callback, $scope);
                 break;
         /* 新浪微博登录 */
@@ -22,7 +22,7 @@ class OauthController extends Controller
                 $app_id = C('SZ_SINA_APP_ID');
                 $scope = C('SZ_SINA_SCOPE');
                 $callback = C('SZ_SINA_CALLBACK');
-                $sns = new \Common\Api\WeiboConnect;
+                $sns = new \Common\Api\WeiboConnect();
                 $sns->login($app_id, $callback, $scope);
                 break;
         /* 默认无登录 */
@@ -44,7 +44,7 @@ class OauthController extends Controller
                  $app_id = C('SZ_QQ_APP_ID');
                  $app_key = C('SZ_QQ_APP_KEY');
                  $callback = C('SZ_QQ_CALLBACK');
-                 $qq = new \Common\Api\QQConnect;
+                 $qq = new \Common\Api\QQConnect();
                  /* callback返回openid和access_token */
                  $back = $qq->callback($app_id, $app_key, $callback);
                         //防止刷新
@@ -59,7 +59,7 @@ class OauthController extends Controller
                  $app_key = C('SZ_SINA_APP_KEY');
                  $scope = C('SZ_SINA_SCOPE');
                  $callback = C('SZ_SINA_CALLBACK');
-                 $weibo = new \Common\Api\WeiboConnect;
+                 $weibo = new \Common\Api\WeiboConnect();
                  /* callback返回openid和access_toke */
                  $back = $weibo->callback($app_id, $app_key, $callback);
                  empty($back) && $this->error("请重新授权登录", U('/user/login/index'));

@@ -16,7 +16,7 @@ class MarketController extends Controller
             $whereMark['currency_mark'] = I('get.coin');
         }
         
-        $whereMark['is_line']=1;
+        $whereMark['is_line'] = 1;
         $liCurrency = M('Currency')->field('currency_id,currency_name,currency_logo,currency_mark')->where($whereMark)->order('sort')->find();
         
         //判断 有没有 可以交易的币种
@@ -35,31 +35,31 @@ class MarketController extends Controller
         $liCurrency['newPrice'] = $this -> getNewPriceByCurrencyid($liCurrency['currency_id']);
         $buyOrder['type'] = "buy";
         //获取买一价
-        $liCurrency['buyPrice']=$this->getOneOrdersByPrice($liCurrency['currency_id'], 'buy');
+        $liCurrency['buyPrice'] = $this->getOneOrdersByPrice($liCurrency['currency_id'], 'buy');
         //获取卖一价
-         $liCurrency['sellPrice']=$this->getOneOrdersByPrice($liCurrency['currency_id'], 'sell');
+         $liCurrency['sellPrice'] = $this->getOneOrdersByPrice($liCurrency['currency_id'], 'sell');
         //成交盘
         $Deal = M('Trade')->where($wheretrade)->order('add_time desc')->limit(30)->select();
         
      
         //买卖盘   买
-         $sell=$this->getOrdersByType($liCurrency['currency_id'], 'buy', 20, 'desc');
+         $sell = $this->getOrdersByType($liCurrency['currency_id'], 'buy', 20, 'desc');
          // 页面显示 成交量背景 比例
         foreach ($sell as $k => $v) {
-            $sell[$k]['bili']=100-intval(($v['trade_num']/$v['num'])*100)."%";
+            $sell[$k]['bili'] = 100 - intval(($v['trade_num'] / $v['num']) * 100) . "%";
         }
      
         //买卖盘   卖
-         $buy =$this->getOrdersByType($liCurrency['currency_id'], 'sell', 20, 'asc');
-         $buy=  array_reverse($buy);
+         $buy = $this->getOrdersByType($liCurrency['currency_id'], 'sell', 20, 'asc');
+         $buy =  array_reverse($buy);
          // 页面显示 成交量背景 比例
         foreach ($buy as $k => $v) {
-            $buy[$k]['bili']=100-intval(($v['trade_num']/$v['num'])*100)."%";
+            $buy[$k]['bili'] = 100 - intval(($v['trade_num'] / $v['num']) * 100) . "%";
         }
         
         //查询其他交易币  去掉当前 币种
         $where['currency_id'] =  array('NEQ',$liCurrency['currency_id']);
-        $where['is_line']=1;
+        $where['is_line'] = 1;
         $listCurrency = M('Currency')->field('currency_id,currency_name,currency_logo,currency_mark')->where($where)->select();
         foreach ($listCurrency as $k => $v) {
             $listCurrency[$k]['newPrice'] = $this -> getNewPriceByCurrencyid($v['currency_id']);
@@ -81,7 +81,7 @@ class MarketController extends Controller
    */
     public function getNewPriceByCurrencyid(Request $request, $currency_id)
     {
-        $where['currency_id'] =$currency_id;
+        $where['currency_id'] = $currency_id;
         $list = M('Orders')->where($where)->field('price')->order('add_time desc')->find();
         
         if (!empty($list)) {
@@ -93,25 +93,25 @@ class MarketController extends Controller
   
     public function getMarket(Request $request)
     {
-        $where['status']=array('in',array(0,1));
-        $list=M('Orders')->field('price')->where($where)->group('price')->select();
-        $price_arr=array();
-        $buy_arr=array();
-        $sell_arr=array();
+        $where['status'] = array('in',array(0,1));
+        $list = M('Orders')->field('price')->where($where)->group('price')->select();
+        $price_arr = array();
+        $buy_arr = array();
+        $sell_arr = array();
         foreach ($list as $k => $v) {
-            $sell=M('Orders')->field('sum(num) as num')->where($where)->where("type='sell' and price='{$v['price']}'")->select();
-            $buy=M('Orders')->field('sum(num) as num')->where($where)->where("type='buy' and price='{$v['price']}'")->select();
-            $list[$k]['sell']=!empty($sell[0]['num'])?$sell[0]['num']:0;
-            $list[$k]['buy']=!empty($buy[0]['num'])?$buy[0]['num']:0;
+            $sell = M('Orders')->field('sum(num) as num')->where($where)->where("type='sell' and price='{$v['price']}'")->select();
+            $buy = M('Orders')->field('sum(num) as num')->where($where)->where("type='buy' and price='{$v['price']}'")->select();
+            $list[$k]['sell'] = !empty($sell[0]['num']) ? $sell[0]['num'] : 0;
+            $list[$k]['buy'] = !empty($buy[0]['num']) ? $buy[0]['num'] : 0;
         }
         foreach ($list as $k => $v) {
-            $price_arr[]=floatval($v['price']);
-            $sell_arr[]=floatval($v['sell']);
-            $buy_arr[]=floatval($v['buy']);
+            $price_arr[] = floatval($v['price']);
+            $sell_arr[] = floatval($v['sell']);
+            $buy_arr[] = floatval($v['buy']);
         }
-        $data['price']=$price_arr;
-        $data['sell']=$sell_arr;
-        $data['buy']=$buy_arr;
+        $data['price'] = $price_arr;
+        $data['sell'] = $sell_arr;
+        $data['buy'] = $buy_arr;
         $this->ajaxReturn($data);
     }
   
@@ -119,15 +119,15 @@ class MarketController extends Controller
   //获取买卖单分补
     private function getOrdersMarket($type, $currency_id)
     {
-         $where['currency_id']=$currency_id;
-         $where['type']=$type;
-        $max_pirce=M('Orders')->where($where)->max('price');
-        $min_price=M('Orders')->where($where)->min('price');
-        $units=intval(($max_pirce-$min_price)/10);
-        for ($i=0; $i<10; $i++) {
-            $arr_price[]=$min_price+$units*$i;
+         $where['currency_id'] = $currency_id;
+         $where['type'] = $type;
+        $max_pirce = M('Orders')->where($where)->max('price');
+        $min_price = M('Orders')->where($where)->min('price');
+        $units = intval(($max_pirce - $min_price) / 10);
+        for ($i = 0; $i < 10; $i++) {
+            $arr_price[] = $min_price + $units * $i;
         }
-        $start=$min_price;
-        $end=$min_price+$units;
+        $start = $min_price;
+        $end = $min_price + $units;
     }
 }

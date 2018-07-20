@@ -109,7 +109,6 @@ class FillByBankController extends Controller
         $strsubmitxml = "<Ips><GateWayReq>" . $strheaderxml . $strbodyxml . "</GateWayReq></Ips>";
         
         $form_url = "http://newpay.ips.com.cn/psfp-entry/gateway/payment.html";
-        // $form_url="http://pay.huatiansc.com/ips31/ips31.php";
         
         $this->assign('strsubmitxml', $strsubmitxml);
         $this->assign('form_url', $form_url);
@@ -171,9 +170,6 @@ class FillByBankController extends Controller
             
             $resParam = "关联号:" . $ReferenceID . "响应编码:" . $RspCode . "响应说明:" . $RspMsg . "接受时间:" . $ReqDate . "响应时间:" . $RspDate . "数字签名:" . $Signature . "商户订单号:" . $MerBillNo . "币种:" . $CurrencyType . "订单金额:" . $Amount . "订单日期:" . $Date . "交易状态:" . $Status . "发卡行返回信息:" . $Msg . "数据包:" . $Attach . "IPS订单号:" . $IpsBillNo . "交易返回方式:" . $RetEncodeType . "银行订单号:" . $BankBillNo . "支付返回方式:" . $ResultType . "IPS处理时间:" . $IpsBillTime;
             
-            // 验签明文
-            // billno+【订单编号】+currencytype+【币种】+amount+【订单金额】+date+【订单日期】+succ+【成功标志】+ipsbillno+【IPS订单编号】+retencodetype +【交易返回签名方式】+【商户内部证书】
-            
             $sbReq = "<body>" . "<MerBillNo>" . $MerBillNo . "</MerBillNo>" . "<CurrencyType>" . $CurrencyType . "</CurrencyType>" . "<Amount>" . $Amount . "</Amount>" . "<Date>" . $Date . "</Date>" . "<Status>" . $Status . "</Status>" . "<Msg><![CDATA[" . $Msg . "]]></Msg>" . "<Attach><![CDATA[" . $Attach . "]]></Attach>" . "<IpsBillNo>" . $IpsBillNo . "</IpsBillNo>" . "<IpsTradeNo>" . $IpsTradeNo . "</IpsTradeNo>" . "<RetEncodeType>" . $RetEncodeType . "</RetEncodeType>" . "<BankBillNo>" . $BankBillNo . "</BankBillNo>" . "<ResultType>" . $ResultType . "</ResultType>" . "<IpsBillTime>" . $IpsBillTime . "</IpsBillTime>" . "</body>";
             $sign = $sbReq . $pMerCode . $pMerCert;
             
@@ -198,14 +194,14 @@ class FillByBankController extends Controller
                     $link = mysql_connect("localhost", "root", "root") or die("数据库连接失败");
                     mysql_select_db("ybb", $link);
                     mysql_set_charset("utf8");
-                    $result = mysql_query("select count(*) from ".C('DB_PREFIX')."fill where uname='{$extra_return_param}'", $link);
+                    $result = mysql_query("select count(*) from " . C('DB_PREFIX') . "fill where uname='{$extra_return_param}'", $link);
                     
                     $num = mysql_result($result, "0");
                     if (! $num) {
                         echo "<tr align=center bgcolor=#FFFFFF><td colspan=16>暂无用户数据</td></tr>";
                         exit();
                     } else {
-                        $result2 = mysql_query("select * from ".C('DB_PREFIX')."fill where uname='{$extra_return_param}'");
+                        $result2 = mysql_query("select * from " . C('DB_PREFIX') . "fill where uname='{$extra_return_param}'");
                         $row = mysql_fetch_assoc($result2);
                         
                         $assets = $row ['num'];
@@ -213,7 +209,7 @@ class FillByBankController extends Controller
                         $username = $row ['uname'];
                     }
                     
-                    $result3 = mysql_query("select * from ".C('DB_PREFIX')."fill where tradeno='{$order_no}'");
+                    $result3 = mysql_query("select * from " . C('DB_PREFIX') . "fill where tradeno='{$order_no}'");
                     $row3 = mysql_fetch_assoc($result3);
                     if (empty($row3)) {
                         echo "无此订单号" . $order_no . "订单";
@@ -223,16 +219,14 @@ class FillByBankController extends Controller
                     $u_id = $row3 ['uid'];
                     $p_money = $row3 ['num'];
                     
-                    // $sql2 = "update k_money,k_user set k_money.status=1,k_money.update_time=now(),k_user.money=k_user.money+k_money.m_value,k_money.about='ips chong zhi ok',k_money.sxf=0,k_money.balance=k_user.money+k_money.m_value where k_money.uid=k_user.uid and k_money.m_id=$m_id and k_money.`status`=2";
-                    
-                    $sql2 = "UPDATE ".C('DB_PREFIX')."fill SET `status` =1 WHERE id=$m_id";
+                    $sql2 = "UPDATE " . C('DB_PREFIX') . "fill SET `status` =1 WHERE id=$m_id";
                     
                     if (mysql_query($sql2)) {
                         echo "";
                     } else {
                         echo "Error creating database: " . mysql_error();
                     }
-                    $sql3 = "UPDATE ".C('DB_PREFIX')."member SET rmb=rmb +$p_money WHERE member_id=$u_id";
+                    $sql3 = "UPDATE " . C('DB_PREFIX') . "member SET rmb=rmb +$p_money WHERE member_id=$u_id";
                     if (mysql_query($sql3)) {
                         echo "";
                     } else {
@@ -330,13 +324,13 @@ class FillByBankController extends Controller
                     $link = mysql_connect("localhost", "root", "root") or die("数据库连接失败");
                     mysql_select_db("ybb", $link);
                     mysql_set_charset("utf8");
-                    $result = mysql_query("select count(*) from ".C('DB_PREFIX')."fill where uname='{$extra_return_param}'", $link);
+                    $result = mysql_query("select count(*) from " . C('DB_PREFIX') . "fill where uname='{$extra_return_param}'", $link);
                     $num = mysql_result($result, "0");
                     if (! $num) {
                         echo "<tr align=center bgcolor=#FFFFFF><td colspan=16>{$extra_return_param}暂无用户数据</td></tr>";
                         exit();
                     } else {
-                        $result2 = mysql_query("select * from ".C('DB_PREFIX')."fill where uname='{$extra_return_param}'");
+                        $result2 = mysql_query("select * from " . C('DB_PREFIX') . "fill where uname='{$extra_return_param}'");
                         $row = mysql_fetch_assoc($result2);
                         
                         $assets = $row ['num'];
@@ -344,25 +338,18 @@ class FillByBankController extends Controller
                         $username = $row ['uname'];
                     }
                     
-                    $results = mysql_query("select count(*) from ".C('DB_PREFIX')."fill where tradeno='{$order_no}'");
+                    $results = mysql_query("select count(*) from " . C('DB_PREFIX') . "fill where tradeno='{$order_no}'");
                     $nums = mysql_result($results, "0");
                     
                     if (! $nums) {
-                        // $sql = "insert into k_money(uid,m_value,m_order,status,assets,balance) values($uid,$order_amount,'$order_no',2,$assets,$assets)";
-                        
-                        // if (mysql_query($sql)){echo "";}
-                        // else{echo "Error creating database: " . mysql_error();}
-                        
-                        $result3 = mysql_query("select m_id from ".C('DB_PREFIX')."fill where tradeno='{$order_no}'");
+                        $result3 = mysql_query("select m_id from " . C('DB_PREFIX') . "fill where tradeno='{$order_no}'");
                         $row3 = mysql_fetch_assoc($result3);
                         
                         $m_id = $row3 ['id'];
                         $u_id = $row3 ['uid'];
                         $p_money = $row3 ['num'];
                         
-                        // $sql2 = "update k_money,k_user set k_money.status=1,k_money.update_time=now(),k_user.money=k_user.money+k_money.m_value,k_money.about='ips chong zhi ok',k_money.sxf=0,k_money.balance=k_user.money+k_money.m_value where k_money.uid=k_user.uid and k_money.m_id=$m_id and k_money.`status`=2";
-                        
-                        $sql2 = "UPDATE ".C('DB_PREFIX')."fill SET `status` =1 WHERE id=$m_id";
+                        $sql2 = "UPDATE " . C('DB_PREFIX') . "fill SET `status` =1 WHERE id=$m_id";
                         
                         if (mysql_query($sql2)) {
                             echo "";
@@ -370,7 +357,7 @@ class FillByBankController extends Controller
                             echo "Error creating database: " . mysql_error();
                         }
                         
-                        $sql3 = "UPDATE ".C('DB_PREFIX')."user SET rmb=rmb +$p_money WHERE member_id=$u_id";
+                        $sql3 = "UPDATE " . C('DB_PREFIX') . "user SET rmb=rmb +$p_money WHERE member_id=$u_id";
                         
                         if (mysql_query($sql3)) {
                             echo "";

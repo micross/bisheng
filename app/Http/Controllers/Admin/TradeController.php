@@ -11,9 +11,9 @@ class TradeController extends Controller
      */
     public function trade(Request $request)
     {
-            $type=I('type');
-            $currency_id=I('currency_id');
-            $email=I('email');
+            $type = I('type');
+            $currency_id = I('currency_id');
+            $email = I('email');
         if (!empty($type)) {
             $where['a.type'] = array("EQ",$type);
         }
@@ -21,30 +21,30 @@ class TradeController extends Controller
             $where['a.currency_id'] = array("EQ",$currency_id);
         }
         if (!empty($email)) {
-            $where['c.email'] = array('like',"%".$email."%");
+            $where['c.email'] = array('like',"%" . $email . "%");
         }
         $field = "a.*,b.currency_name as b_name,c.email as email";
         $count      = M('Trade')
             ->alias('a')
             ->field($field)
-            ->join("LEFT JOIN ".C("DB_PREFIX")."currency AS b ON a.currency_id = b.currency_id")
-            ->join("LEFT JOIN ".C("DB_PREFIX")."member as c on a.member_id = c.member_id ")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "currency AS b ON a.currency_id = b.currency_id")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "member as c on a.member_id = c.member_id ")
             ->where($where)
             ->count();// 查询满足要求的总记录数
         $Page       = new Page($count, 25);// 实例化分页类 传入总记录数和每页显示的记录数(25)
         //给分页传参数
-        setPageParameter($Page, array('type'=>$type,'currency_id'=>$currency_id,'email'=>$email));
+        setPageParameter($Page, array('type' => $type,'currency_id' => $currency_id,'email' => $email));
          
         $show       = $Page->show();// 分页显示输出
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
         $list = M('Trade')
             ->alias('a')
             ->field($field)
-            ->join("LEFT JOIN ".C("DB_PREFIX")."currency AS b ON a.currency_id = b.currency_id")
-            ->join("LEFT JOIN ".C("DB_PREFIX")."member as c on a.member_id = c.member_id ")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "currency AS b ON a.currency_id = b.currency_id")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "member as c on a.member_id = c.member_id ")
             ->where($where)
             ->order(" a.add_time desc ")
-            ->limit($Page->firstRow.','.$Page->listRows)
+            ->limit($Page->firstRow . ',' . $Page->listRows)
             ->select();
         if ($list) {
             foreach ($list as $key => $vo) {
@@ -64,18 +64,18 @@ class TradeController extends Controller
      */
     public function orders(Request $request)
     {
-        $status_id=I('status_id');
-        $currency_id=I('currency_id');
-        $email=I('email');
+        $status_id = I('status_id');
+        $currency_id = I('currency_id');
+        $email = I('email');
        
         if (!empty($currency_id)) {
             $where['a.currency_id'] = array("EQ",$currency_id);
         }
-        if (!empty($status_id)||$status_id==="0") {
+        if (!empty($status_id) || $status_id === "0") {
             $where['a.status'] = array('EQ',$status_id);
         }
         if (!empty($email)) {
-            $where['c.email'] = array('like',"%".$email."%");
+            $where['c.email'] = array('like',"%" . $email . "%");
         }
 
         
@@ -83,24 +83,24 @@ class TradeController extends Controller
         $count      = M('Orders')
             ->alias('a')
             ->field($field)
-            ->join("LEFT JOIN ".C("DB_PREFIX")."currency AS b ON a.currency_id = b.currency_id")
-            ->join("LEFT JOIN ".C("DB_PREFIX")."member as c on a.member_id = c.member_id ")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "currency AS b ON a.currency_id = b.currency_id")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "member as c on a.member_id = c.member_id ")
             ->where($where)
             ->order(" a.add_time desc ")->count();// 查询满足要求的总记录数
         $Page       = new Page($count, 25);// 实例化分页类 传入总记录数和每页显示的记录数(25)
         //给分页传参数
-        setPageParameter($Page, array('status_id'=>$status_id,'currency_id'=>$currency_id,'email'=>$email));
+        setPageParameter($Page, array('status_id' => $status_id,'currency_id' => $currency_id,'email' => $email));
         
         $show       = $Page->show();// 分页显示输出
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
         $list = M('Orders')
             ->alias('a')
             ->field($field)
-            ->join("LEFT JOIN ".C("DB_PREFIX")."currency AS b ON a.currency_id = b.currency_id")
-            ->join("LEFT JOIN ".C("DB_PREFIX")."member as c on a.member_id = c.member_id ")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "currency AS b ON a.currency_id = b.currency_id")
+            ->join("LEFT JOIN " . C("DB_PREFIX") . "member as c on a.member_id = c.member_id ")
             ->where($where)
             ->order(" a.add_time desc ")
-            ->limit($Page->firstRow.','.$Page->listRows)
+            ->limit($Page->firstRow . ',' . $Page->listRows)
             ->select();
         //币种
         $currency = M('Currency')->field('currency_name,currency_id')->select();
@@ -133,7 +133,7 @@ class TradeController extends Controller
             $this ->ajaxReturn($info);
         }
         $member_id = $list['member_id'];
-        $info =$this->cancelOrdersByOrderId($list);
+        $info = $this->cancelOrdersByOrderId($list);
         $this ->ajaxReturn($info);
     }
     /**
@@ -145,24 +145,24 @@ class TradeController extends Controller
     protected function cancelOrdersByOrderId($one_order)
     {
         M()->startTrans();
-        $r[]=$this->setOrdersStatusByOrdersId(-1, $one_order['orders_id']);
+        $r[] = $this->setOrdersStatusByOrdersId(-1, $one_order['orders_id']);
         //返还资金
         switch ($one_order['type']) {
             case 'buy':
-                $money=($one_order['num']-$one_order['trade_num'])*$one_order['price'];
-                $r[]= $this->setUserMoney($one_order['member_id'], $one_order['currency_trade_id'], $money, 'inc', 'num');
-                $r[]=$this->setUserMoney($one_order['member_id'], $one_order['currency_trade_id'], $money, 'dec', 'forzen_num');
+                $money = ($one_order['num'] - $one_order['trade_num']) * $one_order['price'];
+                $r[] = $this->setUserMoney($one_order['member_id'], $one_order['currency_trade_id'], $money, 'inc', 'num');
+                $r[] = $this->setUserMoney($one_order['member_id'], $one_order['currency_trade_id'], $money, 'dec', 'forzen_num');
                 break;
             case 'sell':
-                $num=$one_order['num']-$one_order['trade_num'] ;
-                $r[]= $this->setUserMoney($one_order['member_id'], $one_order['currency_id'], $num, 'inc', 'num');
-                $r[]=$this->setUserMoney($one_order['member_id'], $one_order['currency_id'], $num, 'dec', 'forzen_num');
+                $num = $one_order['num'] - $one_order['trade_num'] ;
+                $r[] = $this->setUserMoney($one_order['member_id'], $one_order['currency_id'], $num, 'inc', 'num');
+                $r[] = $this->setUserMoney($one_order['member_id'], $one_order['currency_id'], $num, 'dec', 'forzen_num');
                 break;
         }
         //更新订单状态
         if (!in_array(false, $r)) {
             M()->commit();
-            $info['status'] =1;
+            $info['status'] = 1;
             $info['info'] = '撤销成功';
             return $info;
         } else {

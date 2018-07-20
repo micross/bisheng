@@ -18,30 +18,30 @@ class EntrustController extends Controller
     {
         $this->User_status();//判断是否需要进行信息补全
         //获取主币种
-        $currency=$this->getCurrencyByCurrencyId();
+        $currency = $this->getCurrencyByCurrencyId();
         $this->assign('culist', $currency);
         $currencytype = I('currency');
-        $status=I('status');
+        $status = I('status');
         if (!empty($currencytype)) {
-            $where['currency_id'] =$currencytype;
+            $where['currency_id'] = $currencytype;
         }
         
         $where['status'] = array('in','0,1');
         $where['member_id'] = $_SESSION['USER_KEY_ID'];
         
         if (!empty($status)) {
-            $where['status'] =array('in',$status);
+            $where['status'] = array('in',$status);
         }
         
         $count      = M('Orders')->where($where)->count();// 查询满足要求的总记录数
         $Page       = new \Think\Page($count, 10);// 实例化分页类 传入总记录数和每页显示的记录数
         
         //给分页传参数
-        setPageParameter($Page, array('currency'=>$currencytype,'status'=>$status));
+        setPageParameter($Page, array('currency' => $currencytype,'status' => $status));
         
         $show       = $Page->show();// 分页显示输出
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
-        $list = M('Orders')->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+        $list = M('Orders')->where($where)->limit($Page->firstRow . ',' . $Page->listRows)->select();
         
         $this->assign('page', $show);// 赋值分页输出
         $this->assign('list', $list);
@@ -53,31 +53,31 @@ class EntrustController extends Controller
     {
         $this->User_status();//判断是否需要进行信息补全
         //获取主币种
-        $currency=$this->getCurrencyByCurrencyId();
+        $currency = $this->getCurrencyByCurrencyId();
         $this->assign('culist', $currency);
         
         $currencytype = I('currency');
-        $status=I('status');
+        $status = I('status');
         if (!empty($currencytype)) {
-            $where['currency_id'] =$currencytype;
+            $where['currency_id'] = $currencytype;
         }
         
         $where['status'] = array('in','-1,2');
         $where['member_id'] = $_SESSION['USER_KEY_ID'];
         
         if (!empty($status)) {
-            $where['status'] =array('in',$status);
+            $where['status'] = array('in',$status);
         }
         
         $count      = M('Orders')->where($where)->count();// 查询满足要求的总记录数
         $Page       = new \Think\Page($count, 10);// 实例化分页类 传入总记录数和每页显示的记录数
         
         //给分页传参数
-        setPageParameter($Page, array('currency'=>$currencytype,'status'=>$status));
+        setPageParameter($Page, array('currency' => $currencytype,'status' => $status));
         
         $show       = $Page->show();// 分页显示输出
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
-        $list = M('Orders')->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+        $list = M('Orders')->where($where)->limit($Page->firstRow . ',' . $Page->listRows)->select();
         
         $this->assign('page', $show);// 赋值分页输出
     
@@ -97,7 +97,7 @@ class EntrustController extends Controller
             $this ->ajaxReturn($info);
         }
             //获取人的一个订单
-            $one_order=$this->getOneOrdersByMemberAndOrderId($_SESSION['USER_KEY_ID'], $order_id, array(0,1));
+            $one_order = $this->getOneOrdersByMemberAndOrderId($_SESSION['USER_KEY_ID'], $order_id, array(0,1));
         if (empty($one_order)) {
             $info['status'] = -1;
             $info['info'] = '传入信息错误';

@@ -13,7 +13,7 @@ class WebsitebankController extends Controller
     {
        
         //$where['status'] = 1;
-        $where=array();
+        $where = array();
         $Website_bank = M('Website_bank');
         $count      = $Website_bank->where($where)->count();// 查询满足要求的总记录数
         $Page       = new Page($count, 25);// 实例化分页类 传入总记录数和每页显示的记录数(25)
@@ -21,7 +21,7 @@ class WebsitebankController extends Controller
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
         $list = $Website_bank
             ->where($where)
-            ->limit($Page->firstRow.','.$Page->listRows)->select();
+            ->limit($Page->firstRow . ',' . $Page->listRows)->select();
         $this->assign('list', $list);// 赋值数据集
         $this->assign('page', $show);// 赋值分页输出
         $this->display(); // 输出模板
@@ -32,7 +32,7 @@ class WebsitebankController extends Controller
     public function addBank(Request $request)
     {
         if (IS_POST) {
-            $Website_bank= D('Website_bank');
+            $Website_bank = D('Website_bank');
           
             if ($r = $Website_bank->create()) {
                 if ($Website_bank->add($r)) {
@@ -94,7 +94,7 @@ class WebsitebankController extends Controller
         
         if (empty($_POST['bank_id'])) {
             $info['status'] = -1;
-            $info['info'] ='传入参数有误';
+            $info['info'] = '传入参数有误';
             $this->ajaxReturn($info);
         }
         
@@ -103,12 +103,12 @@ class WebsitebankController extends Controller
 
         if (!$r) {
             $info['status'] = 0;
-            $info['info'] ='删除失败';
+            $info['info'] = '删除失败';
             $this->ajaxReturn($info);
         }
         
         $info['status'] = 1;
-        $info['info'] ='删除成功';
+        $info['info'] = '删除成功';
         $this->ajaxReturn($info);
     }
 }

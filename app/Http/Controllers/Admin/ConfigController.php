@@ -8,9 +8,9 @@ class ConfigController extends Controller
 {
     public function index(Request $request)
     {
-        $list=M('Config')->select();
+        $list = M('Config')->select();
         foreach ($list as $k => $v) {
-               $list[$v['key']]=$v['value'];
+               $list[$v['key']] = $v['value'];
         }
         $this->assign('config', $list);
         $this->display();
@@ -43,20 +43,20 @@ class ConfigController extends Controller
     public function updateCofig(Request $request)
     {
         if ($_FILES["logo"]["tmp_name"]) {
-               $_POST['logo']=$this->upload($_FILES["logo"]);
+               $_POST['logo'] = $this->upload($_FILES["logo"]);
             if (!$_POST['logo']) {
                 $this->error('非法上传');
             }
         }
         if ($_FILES["weixin"]["tmp_name"]) {
-             $_POST['weixin']=$this->upload($_FILES["weixin"]);
+             $_POST['weixin'] = $this->upload($_FILES["weixin"]);
             if (!$_POST['weixin']) {
                 $this->error('非法上传');
             }
         }
 
         if ($_FILES["biaoge_url"]["tmp_name"]) {
-            $_POST['biaoge_url']=$this->upload_art($_FILES["biaoge_url"]);
+            $_POST['biaoge_url'] = $this->upload_art($_FILES["biaoge_url"]);
             if (!$_POST['biaoge_url']) {
                 $this->error('非法上传');
             }
@@ -87,7 +87,7 @@ class ConfigController extends Controller
             $_POST['reg_risk_warning'] = I('post.reg_risk_warning', '', 'html_entity_decode');
         }
         foreach ($_POST as $k => $v) {
-            $rs[]=M('Config')->where(C("DB_PREFIX")."config.key='{$k}'")->setField('value', $v);
+            $rs[] = M('Config')->where(C("DB_PREFIX") . "config.key='{$k}'")->setField('value', $v);
         }
         if ($rs) {
             $this->success('配置修改成功');

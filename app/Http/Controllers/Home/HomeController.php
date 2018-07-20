@@ -16,17 +16,17 @@ class HomeController extends Controller
             $this->redirect("Login/index");
         }
          // 添加用户真实姓名等
-        $this->auth = M('Member')->where('member_id ='.$_SESSION['USER_KEY_ID'])->find();
+        $this->auth = M('Member')->where('member_id =' . $_SESSION['USER_KEY_ID'])->find();
         if (empty($this->auth)) {
             $this->redirect("Login/index");
         }
         $this->assign('auth', $this->auth);
         
-        $this->trade=M('Trade');
+        $this->trade = M('Trade');
         //修正会员各个币种信息  currency_user
-        $currency=M('Currency')->select();
+        $currency = M('Currency')->select();
         foreach ($currency as $k => $v) {
-            $rs=$this->getCurrencyUser($_SESSION['USER_KEY_ID'], $v['currency_id']);
+            $rs = $this->getCurrencyUser($_SESSION['USER_KEY_ID'], $v['currency_id']);
             if (!$rs) {
                 $this->addCurrencyUser($_SESSION['USER_KEY_ID'], $v['currency_id']);
             }
@@ -41,12 +41,12 @@ class HomeController extends Controller
      */
     public function addCurrencyUser($uid, $cid)
     {
-        $data['member_id']=$uid;
-        $data['currency_id']=$cid;
-        $data['num']=0;
-        $data['forzen_num']=0;
-        $data['status']=0;
-        $rs=M('Currency_user')->add($data);
+        $data['member_id'] = $uid;
+        $data['currency_id'] = $cid;
+        $data['num'] = 0;
+        $data['forzen_num'] = 0;
+        $data['status'] = 0;
+        $rs = M('Currency_user')->add($data);
         if ($rs) {
             return true;
         } else {
@@ -56,7 +56,7 @@ class HomeController extends Controller
     //获取会员有多少人工充值订单
     public function getPaycountByName($name)
     {
-        $list=M('Pay')->where("member_name='".$name."'")->count();
+        $list = M('Pay')->where("member_name='" . $name . "'")->count();
         if ($list) {
             return $list;
         } else {
@@ -79,25 +79,25 @@ class HomeController extends Controller
      */
     private function jiedong()
     {
-        $time=time();
+        $time = time();
         $bili = null;
         
-        $list=M('Issue_log')->where("deal>0 and add_time<{$time}-60*60*24  and status=0")->select();
+        $list = M('Issue_log')->where("deal>0 and add_time<{$time}-60*60*24  and status=0")->select();
         if (!$list) {
             return false;
         }
         foreach ($list as $k => $v) {
-            $list=$this->getIssueRemoveForzenBiLiByIssueId($v['iid']);
-            $v['remove_forzen_bili'] = $list['remove_forzen_bili']/100;
+            $list = $this->getIssueRemoveForzenBiLiByIssueId($v['iid']);
+            $v['remove_forzen_bili'] = $list['remove_forzen_bili'] / 100;
             $v['remove_forzen_cycle'] = $list['remove_forzen_cycle'];
-            if ($v['add_time']>($time-$v['remove_forzen_cycle']*60*60*24)) {
+            if ($v['add_time'] > ($time - $v['remove_forzen_cycle'] * 60 * 60 * 24)) {
                 continue;
             }
-            M('Issue_log')->where("id={$v['id']}")->setDec('deal', $v['num']*$v['remove_forzen_bili']);
+            M('Issue_log')->where("id={$v['id']}")->setDec('deal', $v['num'] * $v['remove_forzen_bili']);
             M('Issue_log')->where("id={$v['id']}")->setField('add_time', time());
-            M('Currency_user')->where("member_id={$v['uid']} and currency_id={$v['cid']}")->setInc('num', $v['num']*$v['remove_forzen_bili']);
-            M('Currency_user')->where("member_id={$v['uid']} and currency_id={$v['cid']}")->setDec('forzen_num', $v['num']*$v['remove_forzen_bili']);
-            if ($v['deal']==0) {
+            M('Currency_user')->where("member_id={$v['uid']} and currency_id={$v['cid']}")->setInc('num', $v['num'] * $v['remove_forzen_bili']);
+            M('Currency_user')->where("member_id={$v['uid']} and currency_id={$v['cid']}")->setDec('forzen_num', $v['num'] * $v['remove_forzen_bili']);
+            if ($v['deal'] == 0) {
                 M('Issue_log')->where("id={$v['id']}")->setField('status', 1);
             }
             
@@ -118,7 +118,7 @@ class HomeController extends Controller
     private function getIssueRemoveForzenBiLiByIssueId($id)
     {
         $list =  M('Issue')->field('is_forzen,remove_forzen_bili,remove_forzen_cycle')->where("id = $id")->find();
-        if ($list['is_forzen']==0) {
+        if ($list['is_forzen'] == 0) {
             return  $list;
         } else {
             return 0;

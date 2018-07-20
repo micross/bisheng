@@ -12,21 +12,21 @@ class ModifyMemberController extends Controller
     public function modify(Request $request)
     {
         //判断是否是已经完成reg基本注册
-        $login=$this->checkLogin();
+        $login = $this->checkLogin();
         if (!$login) {
             $this->redirect('User/index');
             return;
         }
-        if (session('STATUS')!=0) {
+        if (session('STATUS') != 0) {
             $this->redirect('User/index');
             return;
         }
         if (IS_POST) {
             $M_member = D('Member');
             $id = session('USER_KEY_ID');
-            $_POST['member_id']=$id;
+            $_POST['member_id'] = $id;
             $_POST['status'] = 1;//0=有效但未填写个人信息1=有效并且填写完个人信息2=禁用
-            if (!$data=$M_member->create()) { // 创建数据对象
+            if (!$data = $M_member->create()) { // 创建数据对象
                 // 如果创建失败 表示验证没有通过 输出错误提示信息
                 $data['status'] = 0;
                 $data['info'] = $M_member->getError();
@@ -61,7 +61,7 @@ class ModifyMemberController extends Controller
     public function ajaxCheckNick($nick)
     {
         $nick = urldecode($nick);
-        $data =array();
+        $data = array();
         $M_member = M('Member');
         $where['nick']  = $nick;
         $r = $M_member->where($where)->find();
@@ -106,30 +106,30 @@ class ModifyMemberController extends Controller
     {
         $phone = urldecode(I('phone'));
         if (empty($phone)) {
-            $data['status']=0;
+            $data['status'] = 0;
             $data['info'] = "手机号码不能为空";
             $this->ajaxReturn($data);
         }
         if (!preg_match("/^1[34578]{1}\d{9}$/", $phone)) {
-            $data['status']=-1;
+            $data['status'] = -1;
             $data['info'] = "手机号码不正确";
             $this->ajaxReturn($data);
         }
-        $user_phone=M("Member")->field('phone')->where("phone='$phone'")->find();
+        $user_phone = M("Member")->field('phone')->where("phone='$phone'")->find();
         if (!empty($user_phone)) {
-            $data['status']=-2;
+            $data['status'] = -2;
             $data['info'] = "手机号码已经存在";
             $this->ajaxReturn($data);
         }
         $r = sandPhone($phone, $this->config['CODE_NAME'], $this->config['CODE_USER_NAME'], $this->config['CODE_USER_PASS']);
         if (!$r[1]) {
-            $data['status']=1;
-            $data['info']="发送成功";
+            $data['status'] = 1;
+            $data['info'] = "发送成功";
             $this->ajaxReturn($data);
             exit;
         } else {
-            $data['status'] =-3;
-            $data['info']=chuanglan_status($r[1]);
+            $data['status'] = -3;
+            $data['info'] = chuanglan_status($r[1]);
             $this->ajaxReturn($data);
             exit;
         }

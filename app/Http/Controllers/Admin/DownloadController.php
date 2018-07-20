@@ -8,7 +8,7 @@ class DownloadController extends Controller
 {
     public function index(Request $request)
     {
-        $currency=M('currency')->field('currency_id,currency_name,qianbao_url,guanwang_url')->select();
+        $currency = M('currency')->field('currency_id,currency_name,qianbao_url,guanwang_url')->select();
         $this->assign('list', $currency);
         $this->display();
     }
@@ -29,8 +29,8 @@ class DownloadController extends Controller
             } else {
                 // 上传成功
                 foreach ($info as $k => $v) {
-                    $url=$v['savepath'].$v['savename'];
-                    $r[]=M('Currency')->where('currency_id='.$k)->setField('qianbao_url', '/Uploads'.ltrim($url, "."));
+                    $url = $v['savepath'] . $v['savename'];
+                    $r[] = M('Currency')->where('currency_id=' . $k)->setField('qianbao_url', '/Uploads' . ltrim($url, "."));
                 }
                 if (isset($r)) {
                     $this->success('上传成功');
@@ -55,9 +55,9 @@ class DownloadController extends Controller
         } else {
             // 上传成功
             foreach ($info as $k => $v) {
-                $url=$v['savepath'].$v['savename'];
-                $url='/Uploads'.ltrim($url, ".");
-                $r=M('Config')->where(C("DB_PREFIX")."config.key='biaoge_url'")->setField('value', $url);
+                $url = $v['savepath'] . $v['savename'];
+                $url = '/Uploads' . ltrim($url, ".");
+                $r = M('Config')->where(C("DB_PREFIX") . "config.key='biaoge_url'")->setField('value', $url);
             }
             if (isset($r)) {
                 $this->success('上传成功');
@@ -69,12 +69,12 @@ class DownloadController extends Controller
     public function guanwangUrl(Request $request)
     {
         //返回带有currency_id的一维数组
-        $arr_guanwang_url=I("post.guanwang_url");
+        $arr_guanwang_url = I("post.guanwang_url");
         foreach ($arr_guanwang_url as $k => $v) {
-            $data['currency_id']=$k;
-            $data['guanwang_url']=$v;
+            $data['currency_id'] = $k;
+            $data['guanwang_url'] = $v;
             $re = M("Currency")->save($data);
-            if ($re===false) {
+            if ($re === false) {
                 $this->error('操作失败');
             }
         }

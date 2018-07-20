@@ -18,15 +18,15 @@ class UploadController extends Controller
         // 上传文件
         $info   =   $upload->upload();
         if (!$info) {// 上传错误提示错误信息
-            $arr['status']=0;
-            $arr['info']=$upload->getError();
+            $arr['status'] = 0;
+            $arr['info'] = $upload->getError();
             $this->ajaxReturn();
         } else {
             // 上传成功
-            $pic='/Uploads'.ltrim($info['Filedata']['savepath'].$info['Filedata']['savename'], ".");
+            $pic = '/Uploads' . ltrim($info['Filedata']['savepath'] . $info['Filedata']['savename'], ".");
             ;//去除左侧点
-            $arr['status']=1;
-            $arr['info']=$pic;
+            $arr['status'] = 1;
+            $arr['info'] = $pic;
             $this->ajaxReturn($arr);
         }
     }

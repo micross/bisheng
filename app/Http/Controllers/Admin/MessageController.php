@@ -26,11 +26,11 @@ class MessageController extends Controller
         $count = $M_member_all->where($where)->count(); // 查询满足要求的总记录数
         $Page = new Page($count, 25); // 实例化分页类 传入总记录数和每页显示的记录数(25)
          //给分页传参数
-        setPageParameter($Page, array('title'=>$title));
+        setPageParameter($Page, array('title' => $title));
         
         $show = $Page->show(); // 分页显示输出
                                      // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
-        $list = $M_member_all->where($where)->alias('a')->field('a.*, b.name type_name')->join(C("DB_PREFIX")."message_category as b on a.type = b.id ")->order(" a.add_time desc ")->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $list = $M_member_all->where($where)->alias('a')->field('a.*, b.name type_name')->join(C("DB_PREFIX") . "message_category as b on a.type = b.id ")->order(" a.add_time desc ")->limit($Page->firstRow . ',' . $Page->listRows)->select();
         // 查询消息类型
         $this->assign('list', $list); // 赋值数据集
         $this->assign('page', $show); // 赋值分页输出
