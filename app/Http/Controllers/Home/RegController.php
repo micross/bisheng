@@ -6,19 +6,10 @@ use Illuminate\Http\Request;
 
 class RegController extends Controller
 {
-
-    /**
-     * 显示注册界面
-     */
-    public function reg(Request $request)
+    public function index(Request $request)
     {
-        if (session('USER_KEY_ID')) {
-            $this->redirect('User/index');
-            return;
-        }
-        $pid = I('get.Member_id', '', 'intval');
-        $this->assign('pid', $pid);
-        $this->display();
+        $pid = $request->query('pid');
+        return view('home.reg.reg', compact($pid));
     }
     /**
      * 显示服务条款
@@ -37,12 +28,10 @@ class RegController extends Controller
             $_POST['reg_time'] = time();
             $_POST['ip'] = get_client_ip();
             $M_member = D('Member');
-            if ($_POST['pwd']==$_POST['pwdtrade']) {
+            if ($_POST['pwd'] == $_POST['pwdtrade']) {
                 $data['status'] = 0;
                 $data['info'] = "交易密码不能和密码一样";
                 $this->ajaxReturn($data);
-                
-                //                $this->error($M_member->getError());
                 return;
             }
             if (!$M_member->create()) {
@@ -50,7 +39,6 @@ class RegController extends Controller
                 $data['status'] = 0;
                 $data['info'] = $M_member->getError();
                 $this->ajaxReturn($data);
-//                $this->error($M_member->getError());
                 return;
             } else {
                 $r = $M_member->add();
@@ -62,13 +50,10 @@ class RegController extends Controller
                     $data['status'] = 1;
                     $data['info'] = '提交成功';
                     $this->ajaxReturn($data);
-//                    $this->redirect('ModifyMember/modify');
                 } else {
                     $data['status'] = 0;
                     $data['info'] = '服务器繁忙,请稍后重试';
                     $this->ajaxReturn($data);
-//                    $this->error('服务器繁忙,请稍后重试');
-//                    return;
                 }
             }
         } else {
@@ -86,11 +71,11 @@ class RegController extends Controller
             return;
         }
         //判断步骤并重置
-        if (session('procedure')==2) {
+        if (session('procedure') == 2) {
             session('procedure', null);
             $this->display();
         }
-        if (session('procedure')==1) {
+        if (session('procedure') == 1) {
             $this->redirect('Reg/reg');
         }
     }
@@ -100,7 +85,7 @@ class RegController extends Controller
      * @param string $email 规定传参数的结构
      *
      */
-    public function ajaxCheckEmail($email)
+    public function checkEmail($email)
     {
         $email = urldecode($email);
         $data = array();

@@ -1,5 +1,6 @@
-<include file="App/Home/View/Public/header.html"/>
-<!--top end-->
+@extends('layouts.home')
+
+@section('content')
 
 <style type="text/css">
 .ybc_header {
@@ -77,18 +78,18 @@ color: #2471cb;
 	<div class="main_box">
 		<div class="warning">
 			<h2>风险警示</h2>
-			{$config.reg_risk_warning}
+			{!! $config['reg_risk_warning'] !!}
 		</div>
 		<div class="ybc_user2 clearfix">
 			<div class="ybc_text left"><input name="agree" id="tongyi" type="checkbox" onclick="xuanzhong()"></div>
-			<div class="ybc_hint left"><label for="tongyi">我已经认真阅读以上风险提示，并已同意{$config.name} <a href="{:U('Reg/terms')}" id="agreement" class="tycolor">服务条款</a>，同意在自担风险，自担损失的情况下参与交易
+			<div class="ybc_hint left"><label for="tongyi">我已经认真阅读以上风险提示，并已同意{{ $config['name'] }} <a href="{{ url('reg/terms') }}" id="agreement" class="tycolor">服务条款</a>，同意在自担风险，自担损失的情况下参与交易
 </label></div>
 			<div class="ybc_hint left"><span id="agree"></span></div>
 		</div>
 		<div class="ybc_user1 clearfix">
 			<div class="ybc_label left"><label>&nbsp;</label></div>
 			<div class="ybc_text left"><input value="继续注册" id="next-btn" class="ybc_next" style="background-color:#e1e1e1; " type="submit"></div>
-			<div class="ybc_hint1 left"><span id="agree"> <a href="{:U('Index/index')}" class="tycolor">取消</a></span></div>
+			<div class="ybc_hint1 left"><span id="agree"> <a href="{{ url('/') }}" class="tycolor">取消</a></span></div>
 		</div>
 	</div>
 </div>
@@ -100,16 +101,12 @@ color: #2471cb;
         <li><span>3</span>实名认证</li>
         <li><span>4</span>注册成功</li>
     </ul>
-    <form class="ybc_userarea" id="ttttform" method="post" jump-url="{:U('Reg/regSuccess')}" action="{:U('Reg/addReg')}" onsubmit="return step2();">
+    <form class="ybc_userarea" id="ttttform" method="post" jump-url="{{ url('reg/regSuccess') }}" action="{{ url('reg/addReg') }}" onsubmit="return step2();">
         <div id="step1">
-            <!--<div class="ybc_user clearfix">
-                <div class="ybc_label left"><label for="pid">邀请码</label></div>
-                <div class="ybc_text left"><input type='text' name='pid' value="0"></div>
-            </div>-->
             <div class="ybc_user clearfix">
                 <div class="ybc_label left"><label for="email">电子邮箱</label></div>
                 <div class="ybc_text left"><input name="email" id="email" type="text"></div>
-                <div class="ybc_hint left"><strong class="msg_i" id="email_msg">i</strong><span id="emailmsg">请输入您的电子邮箱，用于登录和找回密码</span></div><!--默认 i class="msg_i"  正确class="msg_error"  错误class="msg_ok"-->
+                <div class="ybc_hint left"><strong class="msg_i" id="email_msg">i</strong><span id="emailmsg">请输入您的电子邮箱，用于登录和找回密码</span></div>
             </div>
             <div class="ybc_user clearfix">
                 <div class="ybc_label left"><label for="pwd">登录密码</label></div>
@@ -123,7 +120,7 @@ color: #2471cb;
             </div>
             <div class="ybc_user clearfix">
                 <div class="ybc_label left"><label for="pid">邀请码</label></div>
-                <div class="ybc_text left"><input name="pid" <if condition="$pid">value="{$pid}" readonly="readonly"</if>  type="text"></div>
+                <div class="ybc_text left"><input name="pid" @isset($pid) value="{$pid}" readonly="readonly" @endisset  type="text"></div>
                 <div class="left" style="color:#f00; line-height:30px;">选填项</div>
             </div>
             <div class="ybc_user clearfix">
@@ -156,12 +153,12 @@ color: #2471cb;
         </div>
     </form>
 </div>
-<script src="__PUBLIC__/Home/js/form.js"></script>
+<script src="{{ asset('js/form.js') }}"></script>
 <script type="text/javascript">
     vali = {email: 0, pwd: 0, repwd: 0,tongyi:1};
     valistep2 = {pwdtrade: 0, repwdtrade: 0}
     $('#email').bind('blur', function(){
-        var path_Email = "{:U('Reg/ajaxCheckEmail')}";
+        var path_Email = "{{ url('reg/ajaxCheckEmail') }}";
         $.get(path_Email,{email:encodeURIComponent($(this).val())}, function(d){
             if(d['status'] == 1){
                 $('#email_msg').html("√");
@@ -310,6 +307,4 @@ color: #2471cb;
 	});
 </script>
 
-<!--footer start-->
-<include file="App/Home/View/Public/footer.html"/>
-<!--footer end-->
+@endsection

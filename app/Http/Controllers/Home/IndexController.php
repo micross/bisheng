@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Article;
-use App\Models\ArticleCategory;
 use App\Models\Flash;
 use App\Models\Currency;
 use App\Models\Trade;
@@ -55,23 +54,14 @@ class IndexController extends Controller
         }
         //*********选择进盟币,安全可信赖end*******
         $link_info = Link::get();
-        //截断友情链接url头，统一写法
-        foreach ($link_info as $k => $v) {
-            $url = "";
-            $url = trim($v['url'], 'https://');
-            $link_info[$k]['url'] = trim($url, 'http://');
-        }
         //*******众筹begin*******/////
         $issue_list = Issue::selectRaw("yang_issue.*, yang_currency.currency_name as name")
         ->leftJoin('currency', 'currency.currency_id', '=', 'issue.currency_id')
         ->orderBy('id', 'desc')->get();
 
-        $help = ArticleCategory::where('parent_id', 6)->limit(4)->get();
-        $team = Article::where('position_id', 7)->limit(4)->get();
-
         //*******众筹end*******/////
         $sum_money = $this->numFormat($all_money);
-        return view('home.index.index', compact('info1', 'info_red1', 'info2', 'info_red2', 'flash', 'arr', 'issue_list', 'all_money', 'link_info', 'sum_money', 'currency', 'config', 'team', 'help'));
+        return view('home.index.index', compact('info1', 'info_red1', 'info2', 'info_red2', 'flash', 'arr', 'issue_list', 'all_money', 'link_info', 'sum_money', 'currency'));
     }
 
 
