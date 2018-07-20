@@ -8,7 +8,34 @@ class IndexController extends Controller
 {
     public function index(Request $request)
     {
-        $this->display();
+        $uid = $_SESSION['admin_userid'];
+        $admin_user=M("Admin")->where("admin_id='$uid'")->find();
+        
+        $config=M("Config")->field('key,value')->select();
+        foreach ($config as $k => $v) {
+            $config[$v['key']]=$v['value'];
+        }
+
+        $URL_MODULE_MAP = array_keys(C('URL_MODULE_MAP'))[0];
+        $adminquanxian=M("Admin")->field('Nav')->where("admin_id='{$_SESSION['admin_userid']}'")->find();
+        $rules=$adminquanxian['nav'];
+        if (empty($rules)) {
+            $this->error('此账号尚未分配权限', $URL_MODULE_MAP.'/Login/login');
+        }
+        $rules=explode(',', $rules);
+        foreach ($rules as $k => $v) {
+            $list[]=M("Nav")->where('nav_id='.$v)->find();
+        }
+        foreach ($list as $k => $v) {
+            $v['nav_url'] = '/'.$URL_MODULE_MAP.$v['nav_url'];
+            $value[$v['cat_id']][]=$v;
+        }
+        foreach ($value as $k => $v) {
+            $this->assign($k."_nav", $v);
+        }
+        $this->assign('URL_MODULE_MAP', $URL_MODULE_MAP);
+                
+        return view('admin.index.index');
     }
 
     /**

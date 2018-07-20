@@ -1,9 +1,10 @@
-<include file="App/Admin/View/Public/left.html"/>
-<!--/sidebar-->
+@extends('layouts.admin')
+
+@section('content')
 
 <div class="main-wrap">
     <div class="crumb-wrap">
-        <div class="crumb-list"><i class="icon-font"></i>首页</div>
+        <div class="crumb-list"><i class="icon-font"></i>首页</div>
     </div>
     <div class="result-wrap">
         <div class="result-title">
@@ -15,84 +16,6 @@
             </div>
         </div>
     </div>
-    <!--<div class="result-wrap">-->
-        <!--<div class="result-title">-->
-            <!--<h1>当前币种信息</h1>-->
-        <!--</div>-->
-        <!--<div class="result-content">-->
-            <!--<table class="result-tab" width="100%">-->
-                <!--<tr>-->
-                    <!--<th>货币LOGO</th>-->
-                    <!--<th>货币名称</th>-->
-                    <!--<th>英文标识</th>-->
-                    <!--<th>总市值</th>-->
-                    <!--<th>钱包余额</th>-->
-                    <!--<th>最新价格</th>-->
-                    <!--<th>昨日价格</th>-->
-                    <!--<th>24H交易量</th>-->
-                    <!--<th>全站交易量</th>-->
-                    <!--<th>操作</th>-->
-                <!--</tr>-->
-                <!--<volist name="list" id="vo" empty="$empty">-->
-                    <!--<tr>-->
-                        <!--<td><notempty name="vo.currency_logo"><img  style="height:40px;"src='{$vo.currency_logo}' /><else/>暂无图片数据</notempty></td>-->
-                        <!--<td>{$vo.currency_name|default='暂无'}</td>-->
-                        <!--<td>{$vo.currency_mark|default='暂无'}</td>-->
-                        <!--<td>￥{$vo.currency_all_money|default='0.00'}</td>-->
-                        <!--<td>{$vo.balance|default='0.00'}</td>-->
-                        <!--<td>{$vo.new_price|default='0.00'}</td>-->
-                        <!--<td>{$vo.old_price|default='0.00'}</td>-->
-                        <!--<td>{$vo.24H_done_num|default='0.00'}</td>-->
-                        <!--<td>{$vo.all_done_num|default='0.00'}</td>-->
-                        <!--<td>-->
-                            <!--<a class="link-update" href="{:U('Currency/add',array('currency_id'=>$vo['currency_id']))}">查看币种信息</a><br>-->
-                            <!--<a class="link-update" href="{:U('Trade/trade',array('currency_id'=>$vo['currency_id']))}">查看交易记录</a><br>-->
-                            <!--<a class="link-update" href="{:U('Trade/orders',array('currency_id'=>$vo['currency_id']))}">查看委托记录</a>-->
-                        <!--</td>-->
-                    <!--</tr>-->
-                <!--</volist>-->
-            <!--</table>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="result-wrap">-->
-        <!--<div class="result-title">-->
-            <!--<h1>全站统计信息</h1>-->
-        <!--</div>-->
-        <!--<div class="result-content">-->
-            <!--<table class="result-tab" width="100%">-->
-                <!--<tr>-->
-                    <!--<td>网站总收入</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                    <!--<td>网站总支出</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>会员总人数</td>-->
-                    <!--<td>{$member|default='0'}人</td>-->
-                    <!--<td>众筹总数量</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>人民币收入</td>-->
-                    <!--<td>￥{$a|default='0'}</td>-->
-                    <!--<td>人民币支出</td>-->
-                    <!--<td>￥{$a|default='0'}</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>{$config.xnb}收入</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                    <!--<td>{$config.xnb}支出</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td>充值数量</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                    <!--<td>提现数量</td>-->
-                    <!--<td>{$a|default='0'}</td>-->
-                <!--</tr>-->
-            <!--</table>-->
-        <!--</div>-->
-    <!--</div>-->
     <div class="result-wrap">
         <div class="result-title">
             <h1>服务器信息</h1>
@@ -163,3 +86,5 @@
 </div>
 </body>
 </html>
+
+@endsection

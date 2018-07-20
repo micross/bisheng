@@ -69,12 +69,6 @@ class HomeController extends Controller
     {
         return M('Currency_user')->field('num,forzen_num,chongzhi_url')->where("Member_id={$this->member['member_id']} and currency_id=$currencyId")->find();
     }
-    //空操作
-    public function _empty()
-    {
-        header("HTTP/1.0 404 Not Found");
-        $this->display('Public:404');
-    }
     
     
     /**

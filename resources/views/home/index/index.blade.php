@@ -1,24 +1,23 @@
-<include file="App/Home/View/Public/header.html"/>
+@extends('layouts.home')
 
-<!--top end-->
-<!--header end-->
+@section('content')
+
 <style>
 .pull-left{ float:left;}
 .pull-right{ float:right;}
 .link a{ color:#000;}
 .link{ margin:0px auto; width:100%;}
-
 </style>
-<script type="text/javascript" src="__PUBLIC__/Home/js/focus.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/Fnc.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/zc.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/1.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/bootstrap.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/jquery.flexslider-min.js"></script>
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/css/hb_index.css">
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/css/zc.css">
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/css/flexslider.css">
-<link rel="shortcut icon" href="1.ico" />
+
+<script src="{{ asset('js/focus.js') }}"></script>
+<script src="{{ asset('js/Fnc.js') }}"></script>
+<script src="{{ asset('js/zc.js') }}"></script>
+<script src="{{ asset('js/1.js') }}"></script>
+<script src="{{ asset('js/bootstrap.js') }}"></script>
+<script src="{{ asset('js/jquery.flexslider-min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/hb_index.css') }}">
+<link rel="stylesheet" href="{{ asset('css/zc.css') }}">
+<link rel="stylesheet" href="{{ asset('css/flexslider.css') }}">
 <!--banner start-->
 <div style="height:360px; width:100%; position:relative; overflow:hidden; min-width:1200px;">
 
@@ -44,11 +43,6 @@
 <div class="ybcoin_section clearfix" style="border:0;">
     <!--币币交易开始-->
     <div id="tags_coin" class="coinarea left" style="position:relative;">
-        <!--<ul id="tags" class="for_coin">
-            <li class="selectTag"><a onmouseover="selectTag('tagContent0',this)">对CNY交易区</a></li>
-            <li><a onmouseover="selectTag('tagContent3',this)">对TRMB交易区</a></li>
-            </ul>
-        -->
         <div class="bgcolor" style="display:none;"></div>
         <div style="margin-top:30px;" id="tagContent">
             <!-- 对CNY交易区 结束-->
@@ -130,7 +124,6 @@
                 <li><a href="{:U('Art/details',array('id'=>$vo2['article_id']))}"><span class="coin_news_title left">{$vo2.title}</span><span class="right">{$vo2.add_time|date='m-d',###}</span></a></li>
             </volist>
         </ul>
-        <!--<div style="margin-top:20px;"><a href="https://www.gemwallet.com/" target="_blank"><img src="images/coin_gemwallet.jpg" alt="竞付宝"></a></div>-->
     </div>
 </div>
 <div class="index_box_2 slogan" style="width:1200px; margin:0px auto; margin-top:30px;">
@@ -150,84 +143,6 @@
                      <div style="transform: rotateX(0deg);" class="btm"><span>{$vo}</span></div>
                  </div>
              </volist>
-
-
-
-        <!--<div class="unit add_f">-->
-        <!--<div class="top"><span>3</span></div>-->
-        <!--<div style="" class="top"><span>3</span></div>-->
-        <!--<div class="btm"><span>3</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>3</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>6</span></div>-->
-        <!--<div style="" class="top"><span>6</span></div>-->
-        <!--<div class="btm"><span>6</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>6</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>8</span></div>-->
-        <!--<div style="" class="top"><span>8</span></div>-->
-        <!--<div class="btm"><span>8</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>8</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit add_w">-->
-        <!--<div class="top"><span>7</span></div>-->
-        <!--<div style="" class="top"><span>7</span></div>-->
-        <!--<div class="btm"><span>7</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>7</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>4</span></div>-->
-        <!--<div style="" class="top"><span>4</span></div>-->
-        <!--<div class="btm"><span>4</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>4</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>7</span></div>-->
-        <!--<div style="" class="top"><span>7</span></div>-->
-        <!--<div class="btm"><span>7</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>7</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit add_w">-->
-        <!--<div class="top"><span>9</span></div>-->
-        <!--<div style="" class="top"><span>9</span></div>-->
-        <!--<div class="btm"><span>9</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>9</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>9</span></div>-->
-        <!--<div style="" class="top"><span>9</span></div>-->
-        <!--<div class="btm"><span>9</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>9</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>5</span></div>-->
-        <!--<div style="" class="top"><span>5</span></div>-->
-        <!--<div class="btm"><span>5</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>5</span></div>-->
-        <!--</div>-->
-
-        <!--<div class="unit add_w">-->
-        <!--<div class="top"><span>3</span></div>-->
-        <!--<div style="" class="top"><span>3</span></div>-->
-        <!--<div class="btm"><span>3</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>3</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>5</span></div>-->
-        <!--<div style="" class="top"><span>5</span></div>-->
-        <!--<div class="btm"><span>5</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>5</span></div>-->
-        <!--</div>-->
-        <!--<div class="unit ">-->
-        <!--<div class="top"><span>8</span></div>-->
-        <!--<div style="" class="top"><span>8</span></div>-->
-        <!--<div class="btm"><span>8</span></div>-->
-        <!--<div style="transform: rotateX(0deg);" class="btm"><span>8</span></div>-->
-        <!--</div>-->
-
-
 
     </div>
 </div>
@@ -249,229 +164,6 @@
 
 </script>
 
-<script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?18784dd00dc1c9774528d08ae7943072";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-<!-- 成功案例 -->
-<!--<div class="success-project">
-    <div class="page-view">
-         <div class="row">
-           <p class="sp-title">众筹</p>
-        </div>
-        <div class="row" style="overflow: hidden;position: relative;">
-            <span class="sp-prev"><img src="__PUBLIC__/Home/images/suc_left_arrow.png"></span>
-            <span class="sp-next"><img src="__PUBLIC__/Home/images/suc_right_arrow.png"></span>
-
-            <div class="sp-view">
-            <volist name="issue_list" id="vo">
-                <div style="width: 400px;" class="sp-wrap">
-                    <div class="sp-box">
-                        <a href="{:U('Zhongchou/details',array('id'=>$vo['id']))}" target="_blank">
-                            <div class="sp-info">
-                                <div class="pull-right pull-right1">
-                                    <h4 style="font-weight: normal;font-size: 16px">{$vo['title']|mb_substr=###,0,8,'utf-8'}</h4>
-
-                                    <p style="font-size: 12px;">{$vo['name']}</p>
-                                </div>
-                                <img src="{$vo['url1']}" style="width: 82px;height: 82px;">
-                                <!--                                    <img src="--><!--" style="width: 82px;height: 82px;">-->
-                   <!-- </div> 
-                        </a>
-
-                        <div class="sp-step">
-                            <div class="pull-left sp-time">
-                                <p><span>{$vo['end_time']|date="Y-m-d",###}</span></p>
-                                <p><span>{$vo['add_time']|date="Y-m-d",###}</span></p>
-                                <p><span>{$vo['ctime']|date="Y-m-d",###}</span></p>
-                            </div>
-                            <div class="pull-right">
-                                <p>众筹完成</p>
-                                <p>众筹开始</p>
-                                <p>初创项目</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </volist>
-                <!--<div style="width: 400px;" class="sp-wrap">-->
-                    <!--<div class="sp-box">-->
-                        <!--<a href="https://www.yuanbaohui.com/project_index/?id=209" target="_blank">-->
-                            <!--<div class="sp-info">-->
-                                <!--<div class="pull-right pull-right1">-->
-                                    <!--<h4 style="font-weight: normal;font-size: 16px">第二次元宝币与太一股认...</h4>-->
-
-                                    <!--<p style="font-size: 12px;">元宝币兑换太一股</p>-->
-                                <!--</div>-->
-                                <!--<img src="__PUBLIC__/Home/images/c3aa0c2605711db444b4fbf2fd235b4a.png" style="width: 82px;height: 82px;">-->
-                                <!--&lt;!&ndash;                                    <img src="&ndash;&gt;&lt;!&ndash;" style="width: 82px;height: 82px;">&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</a>-->
-
-                        <!--<div class="sp-step">-->
-                            <!--<div class="pull-left sp-time">-->
-                                <!--<p><span>2015-08-12</span></p>-->
-                                <!--<p><span>2015-08-10</span></p>-->
-                                <!--<p><span>2015-07-30</span></p>-->
-                            <!--</div>-->
-                            <!--<div class="pull-right">-->
-                                <!--<p>众筹完成</p>-->
-                                <!--<p>众筹开始</p>-->
-                                <!--<p>初创项目</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!---->
-                <!--<div style="width: 400px;" class="sp-wrap">-->
-                    <!--<div class="sp-box">-->
-                        <!--<a href="https://www.yuanbaohui.com/project_index/?id=201" target="_blank">-->
-                            <!--<div class="sp-info">-->
-                                <!--<div class="pull-right pull-right1">-->
-                                    <!--<h4 style="font-weight: normal;font-size: 16px">首次元宝币与太一股（A...</h4>-->
-
-                                    <!--<p style="font-size: 12px;">测试兑换</p>-->
-                                <!--</div>-->
-                                <!--<img src="__PUBLIC__/Home/images/d5b42c5e728e4f80623198daa636fb73.png" style="width: 82px;height: 82px;">-->
-                                <!--&lt;!&ndash;                                    <img src="&ndash;&gt;&lt;!&ndash;" style="width: 82px;height: 82px;">&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</a>-->
-
-                        <!--<div class="sp-step">-->
-                            <!--<div class="pull-left sp-time">-->
-                                <!--<p><span>2015-06-23</span></p>-->
-                                <!--<p><span>2015-06-18</span></p>-->
-                                <!--<p><span>2015-06-17</span></p>-->
-                            <!--</div>-->
-                            <!--<div class="pull-right">-->
-                                <!--<p>众筹完成</p>-->
-                                <!--<p>众筹开始</p>-->
-                                <!--<p>初创项目</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div style="width: 400px;" class="sp-wrap">-->
-                    <!--<div class="sp-box">-->
-                        <!--<a href="https://www.yuanbaohui.com/project_index/?id=191" target="_blank">-->
-                            <!--<div class="sp-info">-->
-                                <!--<div class="pull-right">-->
-                                    <!--<h4 style="font-weight: normal;font-size: 16px">OKDICE数学概率二...</h4>-->
-
-                                    <!--<p style="font-size: 12px;">OKDICE是纯数学随机数的骰子游戏</p>-->
-                                <!--</div>-->
-                                <!--<img src="__PUBLIC__/Home/images/b0548d0ea80e93784d36e03a004ba09e.png" style="width: 82px;height: 82px;">-->
-                                <!--&lt;!&ndash;                                    <img src="&ndash;&gt;&lt;!&ndash;" style="width: 82px;height: 82px;">&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</a>-->
-
-                        <!--<div class="sp-step">-->
-                            <!--<div class="pull-left sp-time">-->
-                                <!--<p><span>2015-05-18</span></p>-->
-                                <!--<p><span>2015-04-30</span></p>-->
-                                <!--<p><span>2015-04-27</span></p>-->
-                            <!--</div>-->
-                            <!--<div class="pull-right">-->
-                                <!--<p>众筹完成</p>-->
-                                <!--<p>众筹开始</p>-->
-                                <!--<p>初创项目</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div style="width: 400px;" class="sp-wrap">-->
-                    <!--<div class="sp-box">-->
-                        <!--<a href="https://www.yuanbaohui.com/project_index/?id=9" target="_blank">-->
-                            <!--<div class="sp-info">-->
-                                <!--<div class="pull-right">-->
-                                    <!--<h4 style="font-weight: normal;font-size: 16px">元宝汇</h4>-->
-
-                                    <!--<p style="font-size: 12px;">元宝网，第一数字货币众筹交易平台</p>-->
-                                <!--</div>-->
-                                <!--<img src="__PUBLIC__/Home/images/917bbfbcc932a39eca211ec8e89d09d7.png" style="width: 82px;height: 82px;">-->
-                                <!--&lt;!&ndash;                                    <img src="&ndash;&gt;&lt;!&ndash;" style="width: 82px;height: 82px;">&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</a>-->
-
-                        <!--<div class="sp-step">-->
-                            <!--<div class="pull-left sp-time">-->
-                                <!--<p><span>2014-06-01</span></p>-->
-                                <!--<p><span>2014-05-01</span></p>-->
-                                <!--<p><span>2014-04-13</span></p>-->
-                            <!--</div>-->
-                            <!--<div class="pull-right">-->
-                                <!--<p>众筹完成</p>-->
-                                <!--<p>众筹开始</p>-->
-                                <!--<p>初创项目</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div style="width: 400px;" class="sp-wrap">-->
-                    <!--<div class="sp-box">-->
-                        <!--<a href="https://www.yuanbaohui.com/project_index/?id=48" target="_blank">-->
-                            <!--<div class="sp-info">-->
-                                <!--<div class="pull-right">-->
-                                    <!--<h4 style="font-weight: normal;font-size: 16px">币涨投资基金</h4>-->
-
-                                    <!--<p style="font-size: 12px;">实时监测元宝汇、btctrade、比特时代等涉及元宝币交易的正规平台交易行情</p>-->
-                                <!--</div>-->
-                                <!--<img src="__PUBLIC__/Home/images/06df42e485da1f44cee4c8886ac2ed95.png" style="width: 82px;height: 82px;">-->
-                                <!--&lt;!&ndash;                                    <img src="&ndash;&gt;&lt;!&ndash;" style="width: 82px;height: 82px;">&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</a>-->
-
-                        <!--<div class="sp-step">-->
-                            <!--<div class="pull-left sp-time">-->
-                                <!--<p><span>2014-08-21</span></p>-->
-                                <!--<p><span>2014-07-21</span></p>-->
-                                <!--<p><span>2014-04-24</span></p>-->
-                            <!--</div>-->
-                            <!--<div class="pull-right">-->
-                                <!--<p>众筹完成</p>-->
-                                <!--<p>众筹开始</p>-->
-                                <!--<p>初创项目</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div style="width: 400px;" class="sp-wrap">-->
-                    <!--<div class="sp-box">-->
-                        <!--<a href="https://www.yuanbaohui.com/project_index/?id=187" target="_blank">-->
-                            <!--<div class="sp-info">-->
-                                <!--<div class="pull-right">-->
-                                    <!--<h4 style="font-weight: normal;font-size: 16px">免费VPN币分发投资</h4>-->
-
-                                    <!--<p style="font-size: 12px;">免费机会仅此一次</p>-->
-                                <!--</div>-->
-                                <!--<img src="__PUBLIC__/Home/images/d09a0420c556744cc948a0cbc7cf21bd.png" style="width: 82px;height: 82px;">-->
-                                <!--&lt;!&ndash;                                    <img src="&ndash;&gt;&lt;!&ndash;" style="width: 82px;height: 82px;">&ndash;&gt;-->
-                            <!--</div>-->
-                        <!--</a>-->
-
-                        <!--<div class="sp-step">-->
-                            <!--<div class="pull-left sp-time">-->
-                                <!--<p><span>2015-04-17</span></p>-->
-                                <!--<p><span>2015-04-13</span></p>-->
-                                <!--<p><span>2015-04-12</span></p>-->
-                            <!--</div>-->
-                            <!--<div class="pull-right">-->
-                                <!--<p>众筹完成</p>-->
-                                <!--<p>众筹开始</p>-->
-                                <!--<p>初创项目</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-           <!-- </div>
-        </div>
-    </div>
-</div> -->
 <!-- 客服信息 -->
 <div class="autobox">
     <ul class="web_service clear pl30">
@@ -537,3 +229,6 @@ $(function() {
 });
 
 </script>
+
+
+@endsection

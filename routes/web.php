@@ -10,7 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::namespace('Home')->middleware([])->group(function () {
+    Route::get('/', 'IndexController@index')->name('home.index');
+});
 
-Route::get('/', function () {
-    return view('welcome');
+Route::namespace('Admin')->prefix('admin')->middleware([])->group(function () {
+    Route::get('/', 'IndexController@index')->name('admin.index');
 });

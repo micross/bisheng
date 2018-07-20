@@ -33,14 +33,6 @@
 
 </head>
 <body>
-<!--<div class="clearfix phone_top" id="phone_top_div" style="display:none;">
-	<div class="left">
-		<p class="left phone_logo"><img src="/images/phone_logo01.png"/></p>
-		<p class="left phone_title">第一数字货币众筹交易平台</p>
-	</div>
-	<a href="javascript:hidephone();" class="phone_x">X</a>
-</div>-->
-<!--top start-->
 <div style="background:#f9f9f9; height:30px;">
     <div style="width:1000px; margin:0 auto;">
         <ul class="qqkf left" style="line-height:30px; color:#999;">

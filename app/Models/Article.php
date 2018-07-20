@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
+    protected $table = 'article';
+
     //查询非标红文章（6个）
     public function info($id)
     {
@@ -32,7 +34,7 @@ class Article extends Model
         ->where(C("DB_PREFIX")."article.sign = 1")
         ->order('add_time desc')
         ->limit(0, 4)
-        ->select();///排序，规定固定10个，红4灰6，///排序，规定固定10个，红4灰6，
+        ->select();
         if ($info) {
             return $info;
         } else {
