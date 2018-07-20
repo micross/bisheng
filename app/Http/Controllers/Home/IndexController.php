@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Article;
+use App\Models\ArticleCategory;
 use App\Models\Flash;
 use App\Models\Currency;
 use App\Models\Trade;
@@ -65,8 +66,11 @@ class IndexController extends Controller
         ->leftJoin('currency', 'currency.currency_id', '=', 'issue.currency_id')
         ->orderBy('id', 'desc')->get();
 
+        $help = ArticleCategory::where('parent_id', 6)->limit(4)->get();
+        $team = Article::where('position_id', 7)->limit(4)->get();
+
         //*******众筹end*******/////
-        return view('home.index.index', compact('info1', 'info_red1', 'info2', 'info_red2', 'flash', 'arr', 'issue_list', 'all_money', 'link_info', 'sum_money', 'currency', 'config'));
+        return view('home.index.index', compact('info1', 'info_red1', 'info2', 'info_red2', 'flash', 'arr', 'issue_list', 'all_money', 'link_info', 'sum_money', 'currency', 'config', 'team', 'help'));
     }
 
 

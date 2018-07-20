@@ -217,3 +217,90 @@ $(".myhome").hover(function(){
 </script>
 
 @yield('content')
+
+
+<style>
+		.rightwidth{ width:340px;}
+		</style>
+		<!--footer start-->
+		
+		<div class="coin_footer" style="position:relative;">
+			<div class="coin_hint">
+				<h2>风险提示</h2>
+				<p>{{ $config['risk_warning'] }}</p>
+			</div>
+			<div class="coin_footerbar">
+				<div class="coin_footer_nav clearfix">
+					<div class="coin_nav coin_copy left">
+						<p><a href="{{ url('/') }}"><img style=" height:55px;" src="{$config.logo}"></a></p>
+					</div>
+					<div class="coin_nav left">
+						<h2>{{ $config['name'] }}团队</h2>
+						<ul>
+							<li><a href="{{ url('/') }}">{{ $config['name'] }}</a></li>
+						@foreach($team as $vo)
+							<li><a href="{{ url('art/details', ['team_id'=>$vo['article_id']]) }}" target="_blank" class="left">{{ $vo['title'] }}</a></li>
+						@endforeach
+						</ul>
+					</div>
+					<div class="coin_nav left">
+						<h2>帮助中心</h2>
+						<ul>
+						@foreach($help as $vo)
+							<li><a href="{{ url('help/index', ['id'=>$vo['id']]) }}" target="_blank" class="left">{{ $vo['name'] }}</a></li>
+						@endforeach
+						</ul>
+					</div>
+					<div class="coin_nav coin_nav02 left">
+						<h2 class="clearfix"><span class="left">联系我们</span><a href="http://weibo.com/{{ $config['weibo'] }}" target="_blank" class="coin_sina left"></a></h2>
+						<ul>
+							<li>客服电话：{{ $config['tel'] }}</li>
+							<li>客服QQ：{{ $config['qq1'] }}</li>
+							<li><a href="mailto:{{ $config['email'] }}">客服邮箱：{{ $config['email'] }}</a></li>
+							<li><a href="mailto:{{ $config['business_email'] }}">业务合作：{{ $config['business_email'] }}</a></li>
+						</ul>
+					</div>
+					<div class="coin_nav coin_nav02 left rightwidth" style="position:relative;">
+					  <div style="float:left; padding-top:25px; padding-left:10px;"><img style=" width:100px;" src="{$config['weixin']}"/></div>
+					  <div style=" float:left; padding-left:10px;">
+						<p class="coin_phone400">{{ $config['tel'] }}</p>
+						<p class="coin_phoneqq"><a href="http://wpa.qq.com/msgrd?v=3&uin={$config['qq1']}&site=qq&menu=yes" target="_blank">在线客服</a></p>
+						<p>工作日:9-19时 节假日:9-18时</p>
+					   </div>
+						<div class="group" style="left:12px;margin-top: 40px">
+							<ul class="qq_all" style="    margin-left: 10px;">
+								<li><a style="flont:left; " href="javascript:void(0)">{{ $config['name'] }}官方群<img style="margin-top:5px;" src="{{ asset('images/xiala.png') }}"></a>
+									<ul style="margin-left: 105px;">
+										<li>{{ $config['name'] }}官方1群 {{ $config['qqqun1'] }}</li>
+										<li>{{ $config['name'] }}官方2群 {{ $config['qqqun2'] }}</li>
+										<li>{{ $config['name'] }}官方3群 {{ $config['qqqun3'] }}</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="footer_aq">
+			<p>{{ $config['copyright'] }}</p>
+			<p>{{ $config['record'] }}</p>
+			<ul class="footerSafety clearfix">
+				<li class="safety02"><a href="http://net.china.com.cn/" target="_blank"></a></li>
+				<li class="safety03"><a href="http://webscan.360.cn/index/checkwebsite/?url={{ $config['localhost'] }}" target="_blank"></a></li>
+				<li class="safety04"><a href="http://www.cyberpolice.cn/wfjb/" target="_blank"></a></li>
+			</ul>
+		</div>
+		<div id="weixin" style="position:absolute; bottom:88px; left:50%; margin-left:170px; display:block;"></div>
+		<script>
+			$('#coin_weixin').mouseover(function(){
+				$('#weixin').show();
+			}).mouseout(function(){
+				$('#weixin').hide();
+			});
+		</script>
+		<script src="{{ asset('js/gotop.js') }}"></script>
+		<script src="{{ asset('js/link.js') }}"></script>
+		<script src="{{ asset('js/slides.js') }}"></script>
+		</div>
+	</body>
+	</html>

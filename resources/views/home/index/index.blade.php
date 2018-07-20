@@ -24,18 +24,32 @@
 <div>
 	<div class="flexslider">
 		<ul class="slides">
-			<volist name='flash' id='vo'>
-            	<li><a href="http://{$vo.jump_url|default='#'}" target="_blank"><img src="{$vo.pic}" alt="{$vo.title}" style="height:320px;"></a></li>
-            </volist>
+            @foreach($flash as $item)
+            	<li><a href="//{{ $item['jump_url'] }}" target="_blank"><img src="{{ $item['pic'] }}" alt="{{ $item['title'] }}" style="height:320px;"></a></li>
+            @endforeach
 		</ul>
 	</div>
 	<div class="ybcoin_volume">
 		<div style="color:#fff;">
 			<p style=" font-size:16px; margin-bottom:5px; text-align: center;">风险提示</p>
-			<p style=" font-size:12px; line-height:22px;">{$config.risk_warning}</p>
+			<p style=" font-size:12px; line-height:22px;">{{ $config['risk_warning'] }}</p>
 		</div>
-					<div class="news_coin"><empty name="member"><a href="{:U('Login/index')}">立即登录</a><else/><a href="{:U('User/index')}">我的账户</a></empty></div>
-			<p class="coin_reg"><empty name="member"><a href="{:U('Reg/reg')}" class="left">免费注册</a><!-- <a href="{:U('Oauth/index',array('type'=>'qq'))}" class="right">QQ登录  </a> --><else/></empty><a href="{:U('Dow/newcoin')}" class="right">我要上新币</a></p>
+			<div class="news_coin">
+                @auth
+                <a href="{:U('User/index')}">我的账户</a>
+                @endauth
+                @guest
+                <a href="{:U('Login/index')}">立即登录</a>
+                @endguest
+            </div>
+			<p class="coin_reg">
+                @auth
+                <a href="{:U('Dow/newcoin')}" class="right">我要上新币</a>
+                @endauth
+                @guest
+                <a href="{:U('Reg/reg')}" class="left">免费注册</a>
+                @endguest
+            </p>
 			</div>
 </div>
 </div>
@@ -47,7 +61,7 @@
         <div style="margin-top:30px;" id="tagContent">
             <!-- 对CNY交易区 结束-->
             <div class="tagContent selectTag" id="tagContent0">
-                 <p style="color:#f00; font-size:14px; margin-bottom:10px;">{$config.friendship_tips}</p>
+                 <p style="color:#f00; font-size:14px; margin-bottom:10px;">{!! $config['friendship_tips'] !!}</p>
                 <table class="coin_list coinarea" border="0" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr>
@@ -62,19 +76,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <volist name='currency' id='vo' empty='$empty'>
+                        @forelse ($currency as $vo)
                         <tr class="coin_num">
-                            <td><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}"><img src="{$vo.currency_logo}" style="width:20px; height:20px;"></a></td>
-                            <td class="coin_name"><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}">{$vo.currency_name|default='虚拟币'}{$vo.currency_mark|default=''}</a></td>
-                            <td><eq name='vo.new_price_status' value='0' ><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="buy"><else/><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="sell"></eq>
-                                {$vo.new_price|default='暂无'}<eq name='vo.new_price_status' value='0'>↓<else/>↑</eq></a></td>
-                            <td><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}">{$vo.24H_done_num|default='0'}</a></td>
-                            <td><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}">{$vo.24H_done_money|default='0'}</a></td>
-                            <td><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}">{$vo.currency_all_money|default='0'}</a></td>
-                            <td><gt name='vo.24H_change' value='0'><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="sell"><else/><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="buy"></gt>{$vo.24H_change|default='0'}%</a></td>
-                            <td><gt name='vo.7D_change' value='0'><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="sell">+<else/><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="buy"></gt>{$vo.7D_change|default='0'}%</a></td>
+                            <td><a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}"><img src="{{ $vo['currency_logo'] }}" style="width:20px; height:20px;"></a></td>
+                            <td class="coin_name"><a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}">{{ $vo['currency_name'] }}{{ $vo['currency_mark'] }}</a></td>
+                            <td>
+                                <eq name='vo.new_price_status' value='0' >
+                                    <a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="buy"><else/><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="sell">
+                                </eq>
+                                {{ $vo['new_price'] }}<eq name='vo.new_price_status' value='0'>↓<else/>↑</eq></a></td>
+                            <td><a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}">{{ $vo['24H_done_num'] }}</a></td>
+                            <td><a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}">{{ $vo['24H_done_money'] }}</a></td>
+                            <td><a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}">{$vo.currency_all_money|default='0'}</a></td>
+                            <td>
+                                <gt name='vo.24H_change' value='0'>
+                                    <a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}" class="sell">
+                                        <else/><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="buy"></gt>{$vo.24H_change|default='0'}%</a></td>
+                            <td>
+                                <gt name='vo.7D_change' value='0'>
+                                    <a href="{{ url('orders/index', ['currency'=>$vo['currency_mark']]) }}" class="sell">+<else/><a href="{:U('Orders/index',array('currency'=>$vo['currency_mark']))}" class="buy"></gt>{$vo.7D_change|default='0'}%</a></td>
                         </tr>
-                    </volist>
+                    @empty
+                       暂无数据
+                    @endforelse
                     </tbody>
                 </table>
             </div>
@@ -87,14 +111,14 @@
             <a href="{:U('Art/index',array('id'=>'1'))}" class="right">更多</a>
         </div>
         <ul>
-            <volist name="info_red1" id="vo_red1">
+                @foreach($info_red1 as $vo)
                 <li>
                     <a href="{:U('Art/details',array('id'=>$vo_red1['article_id']))}">
-                        <span class="coin_news_title left" style="color:red;font-weight:bold;">{$vo_red1.title}</span>
-                        <span class="right">{$vo_red1.add_time|date='m-d',###}</span>
+                        <span class="coin_news_title left" style="color:red;font-weight:bold;">{{ $vo_red1->title }}</span>
+                        <span class="right">{{ $vo_red1['add_time'] }}</span>
                     </a>
                 </li>
-            </volist>
+                @endforeach
             <volist name="info1" id="vo1">
                 <li>
                     <a href="{:U('Art/details',array('id'=>$vo1['article_id']))}">
@@ -209,17 +233,14 @@
     <div class="linkbox">
         <h4>友情链接</h4>
         <ul>
-            <volist name = "link_info" id = "vo">
-                <li><a target="_blank" href="http://{$vo['url']}" style=" font-size:16px;">{$vo.name}</a> </li>
-            </volist>
+            @foreach($link_info as $vo)
+                <li><a target="_blank" href="{{ $vo['url'] }}" style=" font-size:16px;">{{ $vo->name }}</a> </li>
+            @endforeach
 
         </ul>
     </div>
 </div>
 
-<!--footer start-->
-<include file="App/Home/View/Public/footer.html"/>
-<!--footer end-->
 <script>
 $(function() { 
     $(".flexslider").flexslider({
