@@ -70,6 +70,7 @@ class IndexController extends Controller
         $team = Article::where('position_id', 7)->limit(4)->get();
 
         //*******众筹end*******/////
+        $sum_money = $this->numFormat($all_money);
         return view('home.index.index', compact('info1', 'info_red1', 'info2', 'info_red2', 'flash', 'arr', 'issue_list', 'all_money', 'link_info', 'sum_money', 'currency', 'config', 'team', 'help'));
     }
 

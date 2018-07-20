@@ -152,8 +152,8 @@
 </div>
 <div class="index_box_2 slogan" style="width:1200px; margin:0px auto; margin-top:30px;">
 
-    <div class="slogan_title">选择{$config.name|default='虚拟网'},安全可信赖</div>
-        <div class="slogan_tis">累计交易额:<span id="yi"><span>{$sum_money|default='0'}</span></div>
+    <div class="slogan_title">选择{{ $config['name'] }},安全可信赖</div>
+        <div class="slogan_tis">累计交易额:<span id="yi"><span>{{ $sum_money }}</span></div>
         <div id="cumulative">
           <div class="number_box">
              <volist name="arr" id="vo" key="key">
@@ -171,13 +171,12 @@
     </div>
 </div>
 </div>
-<script type="text/javascript" src="__PUBLIC__/Home/js/coinindex.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/tab.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/slide.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/hb_lang.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/hb_sea.js"></script>
-<script type="text/javascript" src="__PUBLIC__/Home/js/hb_hm.js"></script>
-<script src="%EF%BF%A52717.80%20_%20%E3%80%90%E7%81%AB%E5%B8%81%E3%80%91%E8%99%9A%E6%8B%9F%E8%B4%A7%E5%B8%81%E4%BA%A4%E6%98%93_%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0_%E8%99%9A%E6%8B%9F%E5%B8%81%E8%8E%B1%E7%89%B9%E5%B8%81_%E6%AF%94%E7%89%B9%E5%B8%81%E5%AE%98%E7%BD%91_files/page_glb_var.js"></script>
+<script src="{{ asset('js/coinindex.js') }}"></script>
+<script src="{{ asset('js/tab.js') }}"></script>
+<script src="{{ asset('js/slide.js') }}"></script>
+<script src="{{ asset('js/hb_lang.js') }}"></script>
+<script src="{{ asset('js/hb_sea.js') }}"></script>
+<script src="{{ asset('js/hb_hm.js') }}"></script>
 <script>
     seajs.use("dist/page_index");
     /**/
@@ -191,10 +190,12 @@
 <!-- 客服信息 -->
 <div class="autobox">
     <ul class="web_service clear pl30">
-        <li class="w265"><a id="BizQQWPA" href="http://wpa.qq.com/msgrd?v=3&uin={$config['qq1']}&site=qq&menu=yes"><div class="web_service_pic service_1"></div><div class="web_service_pic_num"><p>{$config.qq1|default="暂无"}</p><div class="qqsecvice">在线QQ客服</div></div></a></li>
-        <li class="w245"><div class="web_service_pic service_2"></div><div class="web_service_pic_num"><p>{$config.tel|default="暂无"}</p><div>工作日:9-19时 节假日:9-18时</div></div></li>
-        <li class="w265"><a href="http://weibo.com/{$config['weibo']}" target="_blank"><div class="web_service_pic service_3"></div><div class="web_service_pic_num"><p>{$config['weibo']|default="暂无"}</p><div>新浪官方微博</div></div></a></li>
-        <li><div class="web_service_pic service_4"></div><div class="web_service_pic_num"><p>2群：{$config['qqqun2']|default="暂无"}</p><div class="h_underl">交流QQ群<!--  <a href="javascript:;" class="orange">查看更多</a>   --></div></div></li>
+        <li class="w265"><a id="BizQQWPA" href="http://wpa.qq.com/msgrd?v=3&uin={{ $config['qq1'] }}&site=qq&menu=yes"><div class="web_service_pic service_1"></div><div class="web_service_pic_num"><p>{{ $config['qq1'] }}</p><div class="qqsecvice">在线QQ客服</div></div></a></li>
+        <li class="w245"><div class="web_service_pic service_2"></div><div class="web_service_pic_num"><p>{{ $config['tel'] }}</p><div>工作日:9-19时 节假日:9-18时</div></div></li>
+        <li class="w265"><a href="http://weibo.com/{{ $config['weibo'] }}" target="_blank"><div class="web_service_pic service_3"></div>
+            <div class="web_service_pic_num"><p>{{ $config['weibo'] }}</p><div>新浪官方微博</div></div></a></li>
+        <li><div class="web_service_pic service_4"></div><div class="web_service_pic_num"><p>2群：{{ $config['qqqun2'] }}</p>
+            <div class="h_underl">交流QQ群</div></div></li>
     </ul>
 </div>
 
