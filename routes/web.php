@@ -14,6 +14,7 @@ Route::namespace('Home')->middleware([])->group(function () {
     Route::get('', 'IndexController@index')->name('home.index');
     Route::get('reg/reg', 'RegController@index')->name('home.reg');
     Route::get('reg/ajaxCheckEmail', 'RegController@checkEmail')->name('home.checkemail');
+    Route::post('reg/addReg', 'RegController@addReg')->name('home.addreg');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware([])->group(function () {
